@@ -5,7 +5,7 @@ FROM bellsoft/liberica-openjdk-alpine:17
 WORKDIR /app
 
 # Copy the project JAR file into the container
-COPY target/Project2-0.0.1-SNAPSHOT.jar app.jar
+COPY target/project3-0.0.1-SNAPSHOT.jar app.jar
 
 # Run the jar file (relying on Heroku's PORT environment variable)
 ENTRYPOINT ["java", "-Dserver.port=${PORT:-8080}", "-jar", "/app/app.jar"]
