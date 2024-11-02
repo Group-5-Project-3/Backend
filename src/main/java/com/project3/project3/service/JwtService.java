@@ -21,9 +21,10 @@ public class JwtService {
 
     private final SecretKey SECRET_KEY;
 
-    public JwtService(@Value("${JWT_SECRET}") String secretKey) {
+    public JwtService() {
+        String secretKey = System.getenv("JWT_SECRET");
         byte[] decodedKey = Base64.getDecoder().decode(secretKey);
-        this.SECRET_KEY = Keys.hmacShaKeyFor(decodedKey);  // Decode the Base64-encoded string
+        this.SECRET_KEY = Keys.hmacShaKeyFor(decodedKey);
     }
 
     // Generate JWT token with roles and user ID as the subject
@@ -36,7 +37,7 @@ public class JwtService {
                 .setSubject(userId)  // Use userId as the subject
                 .claim("roles", roles)  // Store roles as List<String>
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))  // 10-hour expiration
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))  // 24-hour expiration
                 .signWith(SECRET_KEY)
                 .compact();
     }

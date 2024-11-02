@@ -5,15 +5,15 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        IMAGE_TAG: ${IMAGE_TAG}  # Pass the IMAGE_TAG as a build argument
-    image: project2:${IMAGE_TAG}  # Use the dynamic timestamp image tag
+        IMAGE_TAG: ${IMAGE_TAG}
+    image: project2:${IMAGE_TAG}
     environment:
-      - PORT=8080  # Specify the port explicitly
+      - PORT=8080
       - MONGODB_URI=mongodb+srv://pemitchell:TThycxG6X78dXSH0@nytbooksdb.5ugif.mongodb.net/BooksDatabase?retryWrites=true&w=majority&appName=NYTBooksDB
-      - # place API key here.
+      - GOOGLE_MAPS_API_KEY=AIzaSyDqZs2GcqLEwKD1rganE4GHJ5HHY85hRd0
       - JWT_SECRET=Y3N0NDM4cHJvamVjdDI=  # Base64 encoded JWT secret key
     ports:
-      - "8080:8080"  # Map the application port to the host
+      - "8080:8080"
     depends_on: []  # No dependencies since we are using Atlas
     networks:
       - app-network
