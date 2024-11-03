@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 
@@ -31,17 +31,14 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
         try {
+            // Authenticate the user
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
             );
-
-            // Load user details and fetch the userId
             UserDetails userDetails = userService.loadUserByUsername(authRequest.getUsername());
             String userId = userService.findUserByUsername(authRequest.getUsername())
                     .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + authRequest.getUsername()))
                     .getId();
-
-            // Generate token using userId and authorities
             String token = jwtService.generateToken(userId, userDetails.getAuthorities());
             return ResponseEntity.ok(new AuthResponse(token));
         } catch (AuthenticationException e) {
@@ -51,15 +48,19 @@ public class AuthController {
         }
     }
 
-
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
         try {
+            // Set the default role
             user.setRoles(Collections.singletonList("ROLE_USER"));
+
+            // Save the user (ensure password hashing with BCrypt)
             userService.saveUser(user);
+
             return ResponseEntity.ok("User registered successfully. Please log in.");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("An error occurred while creating the account.");
         }
     }
 }
+
