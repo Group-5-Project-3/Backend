@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 
@@ -30,11 +31,15 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
         try {
-            UserDetails userDetails = userService.loadUserByUsername(authRequest.getUsername());
+            // Authenticate the user
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
             );
-            String token = jwtService.generateToken(userDetails.getUsername(), userDetails.getAuthorities());
+            UserDetails userDetails = userService.loadUserByUsername(authRequest.getUsername());
+            String userId = userService.findUserByUsername(authRequest.getUsername())
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + authRequest.getUsername()))
+                    .getId();
+            String token = jwtService.generateToken(userId, userDetails.getAuthorities());
             return ResponseEntity.ok(new AuthResponse(token));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(401).body("Invalid username or password");
@@ -46,14 +51,16 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
         try {
+            // Set the default role
             user.setRoles(Collections.singletonList("ROLE_USER"));
-            User createdUser = userService.saveUser(user);
-            String token = jwtService.generateToken(
-                    createdUser.getId(), createdUser.getAuthorities()
-            );
-            return ResponseEntity.ok(new AuthResponse(token));
+
+            // Save the user (ensure password hashing with BCrypt)
+            userService.saveUser(user);
+
+            return ResponseEntity.ok("User registered successfully. Please log in.");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("An error occurred while creating the account.");
         }
     }
 }
+

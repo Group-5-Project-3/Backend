@@ -1,7 +1,7 @@
 # Variables
-IMAGE_NAME = project2
+IMAGE_NAME = project3
 IMAGE_TAG := $(shell date +%Y%m%d%H%M%S)  # Timestamp generated once
-HEROKU_APP_NAME = cst438-project2
+HEROKU_APP_NAME = cst438project3
 HEROKU_REGISTRY = registry.heroku.com/$(HEROKU_APP_NAME)/web
 
 # Default target
@@ -39,3 +39,4 @@ open:
 clean:
 	echo "Cleaning up..."
 	docker rmi $(HEROKU_REGISTRY) || true
+
