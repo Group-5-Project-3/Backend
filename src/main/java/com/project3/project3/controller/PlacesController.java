@@ -1,15 +1,17 @@
 package com.project3.project3.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:8081")
 public class PlacesController {
 
-    private final String apiKey = System.getenv("GOOGLE_MAPS_API_KEY"); // Fetch API key from environment variable
+    private final String apiKey = System.getenv("GOOGLE_MAPS_API_KEY");
 
     @GetMapping("/places")
     public ResponseEntity<?> getNearbyPlaces(
