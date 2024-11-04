@@ -12,8 +12,7 @@ public class WebConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("http://localhost:8081"); // Add your frontend URL for development
-        config.addAllowedOrigin("https://your-deployment-url.com"); // Add your production frontend URL
+        config.addAllowedOrigin("*"); // Add your frontend URL for development
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
         config.setAllowCredentials(true);
