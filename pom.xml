@@ -121,6 +121,13 @@
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.11.5</version>
 		</dependency>
+
+		<!-- AWS S3 for Image Object creation-->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-s3</artifactId>
+			<version>1.12.20</version> <!-- You can update this version if needed -->
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
