@@ -18,8 +18,9 @@ public class Trail {
     private double rating;
 
     // Lists of related document IDs
-    private List<String> reviewIds;    // List of review IDs for the trail
-    private List<String> checkInIds;   // List of check-in IDs for the trail
+    private List<String> reviewIds;      // List of review IDs for the trail
+    private List<String> checkInIds;     // List of check-in IDs for the trail
+    private List<String> imageIds;       // List of image IDs for the trail
 
     // Default constructor
     public Trail() {}
@@ -97,5 +98,12 @@ public class Trail {
     public void setCheckInIds(List<String> checkInIds) {
         this.checkInIds = checkInIds;
     }
-}
 
+    public List<String> getImageIds() {
+        return imageIds;
+    }
+
+    public void setImageIds(List<String> imageIds) {
+        this.imageIds = imageIds;
+    }
+}
