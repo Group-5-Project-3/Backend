@@ -11,14 +11,16 @@ public class Badge {
 
     private String name;
     private String criteria;
+    private BadgeType type;
 
     // Default constructor
     public Badge() {}
 
     // Constructor
-    public Badge(String name, String criteria) {
+    public Badge(String name, String criteria, BadgeType type) {
         this.name = name;
         this.criteria = criteria;
+        this.type = type;
     }
 
     // Getters and Setters
@@ -45,4 +47,13 @@ public class Badge {
     public void setCriteria(String criteria) {
         this.criteria = criteria;
     }
+
+    public BadgeType getType() {
+        return type;
+    }
+
+    public void setType(BadgeType type) {
+        this.type = type;
+    }
 }
+
