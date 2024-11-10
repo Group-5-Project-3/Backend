@@ -36,6 +36,8 @@ public class User implements UserDetails {
     private List<String> checkInIds = new ArrayList<>();      // List of check-in IDs
     private List<String> favoriteTrailIds = new ArrayList<>();// List of favorite trail IDs
     private List<String> badgeIds = new ArrayList<>();        // List of awarded badge IDs
+    private List<String> trailImageIds = new ArrayList<>();    // List of IDs for uploaded trail images
+
 
     // Default constructor
     public User() {}
@@ -146,6 +148,14 @@ public class User implements UserDetails {
 
     public void setBadgeIds(List<String> badgeIds) {
         this.badgeIds = badgeIds;
+    }
+
+    public List<String> getTrailImageIds() {
+        return trailImageIds;
+    }
+
+    public void setTrailImageIds(List<String> trailImageIds) {
+        this.trailImageIds = trailImageIds;
     }
 
     // Convert roles to GrantedAuthority objects for Spring Security
