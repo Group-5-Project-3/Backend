@@ -17,34 +17,18 @@ import java.util.stream.Collectors;
 @Service
 public class UserService implements UserDetailsService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private PasswordEncoder passwordEncoder;
 
-    // Method for loading user details by username (required by Spring Security)
+    // Required method for authentication with Spring Security
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
-        return buildUserDetails(user);
-    }
-
-    // Method for loading user details by userId
-    public UserDetails loadUserById(String userId) throws UsernameNotFoundException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
-
-        return buildUserDetails(user);
-    }
-
-    // Helper method to create UserDetails for Spring Security
-    private UserDetails buildUserDetails(User user) {
         Collection<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
@@ -56,7 +40,22 @@ public class UserService implements UserDetailsService {
         );
     }
 
-    // Custom finders
+    // Method for loading user details by userId
+    public UserDetails loadUserById(String userId) throws UsernameNotFoundException {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
+
+        Collection<GrantedAuthority> authorities = user.getRoles().stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getId(),
+                user.getPassword(),
+                authorities
+        );
+    }
+
     public Optional<User> findUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -73,20 +72,28 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id);
     }
 
-    // Save a new user with encrypted password and default role if none provided
     public User saveUser(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(hashedPassword);
+
         if (user.getRoles() == null || user.getRoles().isEmpty()) {
             user.setRoles(List.of("ROLE_USER"));
         }
+
+        if (user.getReviewIds() == null) user.setReviewIds(new ArrayList<>());
+        if (user.getCheckInIds() == null) user.setCheckInIds(new ArrayList<>());
+        if (user.getFavoriteTrailIds() == null) user.setFavoriteTrailIds(new ArrayList<>());
+        if (user.getBadgeIds() == null) user.setBadgeIds(new ArrayList<>());
+        if (user.getTrailImageIds() == null) user.setTrailImageIds(new ArrayList<>());
+
         return userRepository.save(user);
     }
 
-    // Update an existing user’s information
     public Optional<User> updateUser(String id, User updatedUser) {
         return userRepository.findById(id).map(user -> {
             if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
-                user.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+                String hashedPassword = passwordEncoder.encode(updatedUser.getPassword());
+                user.setPassword(hashedPassword);
             }
             if (updatedUser.getUsername() != null && !updatedUser.getUsername().isEmpty()) {
                 user.setUsername(updatedUser.getUsername());
@@ -125,7 +132,6 @@ public class UserService implements UserDetailsService {
         });
     }
 
-    // Delete a user by ID
     public boolean deleteUserById(String id) {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
@@ -134,12 +140,21 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-    // Delete a user directly
     public void deleteUser(User user) {
         userRepository.delete(user);
     }
 
-    // Role management
+    public Optional<User> removeRole(String userId, String role) {
+        return userRepository.findById(userId).map(user -> {
+            user.getRoles().remove(role);
+            return userRepository.save(user);
+        });
+    }
+
+    public Optional<List<String>> getUserRoles(String userId) {
+        return userRepository.findById(userId).map(User::getRoles);
+    }
+
     public Optional<User> assignRole(String userId, String role) {
         return userRepository.findById(userId).map(user -> {
             if (!user.getRoles().contains(role)) {
@@ -148,20 +163,4 @@ public class UserService implements UserDetailsService {
             return userRepository.save(user);
         });
     }
-
-    public Optional<User> removeRole(String userId, String role) {
-        return userRepository.findById(userId).map(user -> {
-            if (user.getRoles().remove(role)) {
-                return userRepository.save(user);
-            }
-            return user;
-        });
-    }
-
-    public Optional<List<String>> getUserRoles(String userId) {
-        return userRepository.findById(userId).map(User::getRoles);
-    }
 }
-
-
-
