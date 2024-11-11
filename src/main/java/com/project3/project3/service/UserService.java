@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,18 +26,15 @@ public class UserService implements UserDetailsService {
     // Required method for authentication with Spring Security
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        // Find user by username in the repository
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
-        // Convert roles from List<String> to Collection<? extends GrantedAuthority>
         Collection<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        // Return a Spring Security User object with username, password, and authorities
         return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),  // Use username for authentication
+                user.getUsername(),
                 user.getPassword(),
                 authorities
         );
@@ -44,18 +42,15 @@ public class UserService implements UserDetailsService {
 
     // Method for loading user details by userId
     public UserDetails loadUserById(String userId) throws UsernameNotFoundException {
-        // Find user by userId in the repository
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
 
-        // Convert roles from List<String> to Collection<? extends GrantedAuthority>
         Collection<GrantedAuthority> authorities = user.getRoles().stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        // Return a Spring Security User object with userId, password, and authorities
         return new org.springframework.security.core.userdetails.User(
-                user.getId(),  // Use userId for JWT and authorization
+                user.getId(),
                 user.getPassword(),
                 authorities
         );
@@ -78,14 +73,18 @@ public class UserService implements UserDetailsService {
     }
 
     public User saveUser(User user) {
-        // Hash the password using BCryptPasswordEncoder
         String hashedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(hashedPassword);
 
-        // Set default role if roles are missing
         if (user.getRoles() == null || user.getRoles().isEmpty()) {
             user.setRoles(List.of("ROLE_USER"));
         }
+
+        if (user.getReviewIds() == null) user.setReviewIds(new ArrayList<>());
+        if (user.getCheckInIds() == null) user.setCheckInIds(new ArrayList<>());
+        if (user.getFavoriteTrailIds() == null) user.setFavoriteTrailIds(new ArrayList<>());
+        if (user.getBadgeIds() == null) user.setBadgeIds(new ArrayList<>());
+        if (user.getTrailImageIds() == null) user.setTrailImageIds(new ArrayList<>());
 
         return userRepository.save(user);
     }
@@ -108,8 +107,26 @@ public class UserService implements UserDetailsService {
             if (updatedUser.getLastName() != null && !updatedUser.getLastName().isEmpty()) {
                 user.setLastName(updatedUser.getLastName());
             }
+            if (updatedUser.getProfilePictureUrl() != null) {
+                user.setProfilePictureUrl(updatedUser.getProfilePictureUrl());
+            }
             if (updatedUser.getRoles() != null && !updatedUser.getRoles().isEmpty()) {
                 user.setRoles(updatedUser.getRoles());
+            }
+            if (updatedUser.getReviewIds() != null) {
+                user.setReviewIds(updatedUser.getReviewIds());
+            }
+            if (updatedUser.getCheckInIds() != null) {
+                user.setCheckInIds(updatedUser.getCheckInIds());
+            }
+            if (updatedUser.getFavoriteTrailIds() != null) {
+                user.setFavoriteTrailIds(updatedUser.getFavoriteTrailIds());
+            }
+            if (updatedUser.getBadgeIds() != null) {
+                user.setBadgeIds(updatedUser.getBadgeIds());
+            }
+            if (updatedUser.getTrailImageIds() != null) {
+                user.setTrailImageIds(updatedUser.getTrailImageIds());
             }
             return userRepository.save(user);
         });
@@ -147,5 +164,3 @@ public class UserService implements UserDetailsService {
         });
     }
 }
-
-
