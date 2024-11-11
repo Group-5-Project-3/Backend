@@ -36,8 +36,8 @@ public class TrailImageService {
 
     public Optional<TrailImage> updateTrailImage(String id, TrailImage updatedTrailImage) {
         return trailImageRepository.findById(id).map(existingImage -> {
-            if (updatedTrailImage.getUrl() != null) {
-                existingImage.setUrl(updatedTrailImage.getUrl());
+            if (updatedTrailImage.getImageUrl() != null) {
+                existingImage.setImageUrl(updatedTrailImage.getImageUrl());
             }
             if (updatedTrailImage.getTrailId() != null) {
                 existingImage.setTrailId(updatedTrailImage.getTrailId());
