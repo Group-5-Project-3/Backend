@@ -37,5 +37,22 @@ public class ReviewService {
     public void deleteReview(String id) {
         reviewRepository.deleteById(id);
     }
+
+    // Update an existing review by ID
+    public Optional<Review> updateReview(String id, Review updatedReview) {
+        return reviewRepository.findById(id).map(existingReview -> {
+            if (updatedReview.getRating() != null) {
+                existingReview.setRating(updatedReview.getRating());
+            }
+            if (updatedReview.getComment() != null) {
+                existingReview.setComment(updatedReview.getComment());
+            }
+            if (updatedReview.getTimestamp() != null) {
+                existingReview.setTimestamp(updatedReview.getTimestamp());
+            }
+            return reviewRepository.save(existingReview);
+        });
+    }
 }
+
 

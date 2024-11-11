@@ -30,8 +30,12 @@ public class BadgeService {
         return badgeRepository.save(badge);
     }
 
-    public void deleteBadge(String id) {
-        badgeRepository.deleteById(id);
+    public boolean deleteBadge(String id) {
+        if (badgeRepository.existsById(id)) {
+            badgeRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
 
