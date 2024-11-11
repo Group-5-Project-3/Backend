@@ -132,6 +132,13 @@ public class UserService implements UserDetailsService {
         });
     }
 
+    public Optional<User> updateProfilePicture(String id, String profileImageUrl) {
+        return userRepository.findById(id).map(user -> {
+            user.setProfilePictureUrl(profileImageUrl);
+            return userRepository.save(user);
+        });
+    }
+
     public boolean deleteUserById(String id) {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
