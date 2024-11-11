@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TrailImageService {
@@ -25,5 +26,32 @@ public class TrailImageService {
         return trailImageRepository.findByUserId(userId);
     }
 
-    public TrailImage saveTrailImage(T
+    public TrailImage saveTrailImage(TrailImage trailImage) {
+        return trailImageRepository.save(trailImage);
+    }
+
+    public Optional<TrailImage> getTrailImageById(String id) {
+        return trailImageRepository.findById(id);
+    }
+
+    public Optional<TrailImage> updateTrailImage(String id, TrailImage updatedTrailImage) {
+        return trailImageRepository.findById(id).map(existingImage -> {
+            if (updatedTrailImage.getUrl() != null) {
+                existingImage.setUrl(updatedTrailImage.getUrl());
+            }
+            if (updatedTrailImage.getTrailId() != null) {
+                existingImage.setTrailId(updatedTrailImage.getTrailId());
+            }
+            if (updatedTrailImage.getUserId() != null) {
+                existingImage.setUserId(updatedTrailImage.getUserId());
+            }
+            return trailImageRepository.save(existingImage);
+        });
+    }
+
+    public void deleteTrailImage(String id) {
+        trailImageRepository.deleteById(id);
+    }
+}
+
 
