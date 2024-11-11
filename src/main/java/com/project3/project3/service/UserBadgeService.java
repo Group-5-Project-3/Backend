@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserBadgeService {
@@ -21,12 +22,20 @@ public class UserBadgeService {
         return userBadgeRepository.findByUserId(userId);
     }
 
+    public Optional<UserBadge> getUserBadge(String userId, String badgeId) {
+        return userBadgeRepository.findByUserIdAndBadgeId(userId, badgeId);
+    }
+
     public UserBadge awardBadgeToUser(UserBadge userBadge) {
         return userBadgeRepository.save(userBadge);
     }
 
-    public void removeBadge(String id) {
-        userBadgeRepository.deleteById(id);
+    public boolean removeBadge(String id) {
+        if (userBadgeRepository.existsById(id)) {
+            userBadgeRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
 

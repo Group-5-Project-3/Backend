@@ -13,7 +13,7 @@ public class Review {
     private String trailId;  // ID of the trail being reviewed
     private String userId;   // ID of the user who wrote the review
 
-    private double rating;
+    private Double rating;
     private String comment;
     private LocalDateTime timestamp;
 
@@ -21,7 +21,7 @@ public class Review {
     public Review() {}
 
     // Constructor
-    public Review(String trailId, String userId, double rating, String comment, LocalDateTime timestamp) {
+    public Review(String trailId, String userId, Double rating, String comment, LocalDateTime timestamp) {
         this.trailId = trailId;
         this.userId = userId;
         this.rating = rating;
@@ -54,11 +54,11 @@ public class Review {
         this.userId = userId;
     }
 
-    public double getRating() {
+    public Double getRating() {
         return rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(Double rating) {
         this.rating = rating;
     }
 
