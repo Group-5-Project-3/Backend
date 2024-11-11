@@ -26,27 +26,16 @@ public class TrailImageService {
         return trailImageRepository.findByUserId(userId);
     }
 
-    public TrailImage saveTrailImage(TrailImage trailImage) {
+    public TrailImage saveTrailImage(String imageUrl, String trailId, String userId) {
+        TrailImage trailImage = new TrailImage();
+        trailImage.setImageUrl(imageUrl);
+        trailImage.setTrailId(trailId);
+        trailImage.setUserId(userId);
         return trailImageRepository.save(trailImage);
     }
 
     public Optional<TrailImage> getTrailImageById(String id) {
         return trailImageRepository.findById(id);
-    }
-
-    public Optional<TrailImage> updateTrailImage(String id, TrailImage updatedTrailImage) {
-        return trailImageRepository.findById(id).map(existingImage -> {
-            if (updatedTrailImage.getImageUrl() != null) {
-                existingImage.setImageUrl(updatedTrailImage.getImageUrl());
-            }
-            if (updatedTrailImage.getTrailId() != null) {
-                existingImage.setTrailId(updatedTrailImage.getTrailId());
-            }
-            if (updatedTrailImage.getUserId() != null) {
-                existingImage.setUserId(updatedTrailImage.getUserId());
-            }
-            return trailImageRepository.save(existingImage);
-        });
     }
 
     public void deleteTrailImage(String id) {

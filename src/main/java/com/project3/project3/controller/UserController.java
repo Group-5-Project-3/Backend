@@ -1,10 +1,12 @@
 package com.project3.project3.controller;
 
 import com.project3.project3.model.User;
+import com.project3.project3.service.ImageService;
 import com.project3.project3.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +17,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private ImageService imageService;
 
     // Find user ID by username
     @GetMapping("/username/{username}")
@@ -62,5 +67,19 @@ public class UserController {
     public ResponseEntity<Void> deleteUserById(@PathVariable String id) {
         boolean deleted = userService.deleteUserById(id);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
+
+    // Upload a profile picture
+    @PostMapping("/{id}/profile-picture")
+    public ResponseEntity<User> uploadProfilePicture(
+            @PathVariable String id,
+            @RequestParam("file") MultipartFile file) {
+        try {
+            String profileImageUrl = imageService.uploadImage(file, System.getenv("BUCKET_NAME"), System.getenv("PROFILE_PIC_FOLDER"));
+            Optional<User> updatedUser = userService.updateProfilePicture(id, profileImageUrl);
+            return updatedUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            return ResponseEntity.status(500).build();
+        }
     }
 }
