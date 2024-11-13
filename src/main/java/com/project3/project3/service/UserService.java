@@ -79,13 +79,6 @@ public class UserService implements UserDetailsService {
         if (user.getRoles() == null || user.getRoles().isEmpty()) {
             user.setRoles(List.of("ROLE_USER"));
         }
-
-        if (user.getReviewIds() == null) user.setReviewIds(new ArrayList<>());
-        if (user.getCheckInIds() == null) user.setCheckInIds(new ArrayList<>());
-        if (user.getFavoriteTrailIds() == null) user.setFavoriteTrailIds(new ArrayList<>());
-        if (user.getBadgeIds() == null) user.setBadgeIds(new ArrayList<>());
-        if (user.getTrailImageIds() == null) user.setTrailImageIds(new ArrayList<>());
-
         return userRepository.save(user);
     }
 
@@ -112,21 +105,6 @@ public class UserService implements UserDetailsService {
             }
             if (updatedUser.getRoles() != null && !updatedUser.getRoles().isEmpty()) {
                 user.setRoles(updatedUser.getRoles());
-            }
-            if (updatedUser.getReviewIds() != null) {
-                user.setReviewIds(updatedUser.getReviewIds());
-            }
-            if (updatedUser.getCheckInIds() != null) {
-                user.setCheckInIds(updatedUser.getCheckInIds());
-            }
-            if (updatedUser.getFavoriteTrailIds() != null) {
-                user.setFavoriteTrailIds(updatedUser.getFavoriteTrailIds());
-            }
-            if (updatedUser.getBadgeIds() != null) {
-                user.setBadgeIds(updatedUser.getBadgeIds());
-            }
-            if (updatedUser.getTrailImageIds() != null) {
-                user.setTrailImageIds(updatedUser.getTrailImageIds());
             }
             return userRepository.save(user);
         });

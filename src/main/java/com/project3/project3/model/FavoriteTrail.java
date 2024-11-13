@@ -10,8 +10,8 @@ public class FavoriteTrail {
     @Id
     private String id;
 
-    private String userId;   // ID of the user who marked the trail as a favorite
-    private String trailId;  // ID of the trail marked as a favorite
+    private String userId;
+    private String trailId;
     private LocalDateTime favoritedTimestamp;
 
     // Default constructor

@@ -1,8 +1,10 @@
 package com.project3.project3.model;
 
 public enum BadgeType {
-    BRONZE,
-    SILVER,
-    GOLD,
-    PLATINUM
+    NATIONAL_PARKS,
+    TRAIL_MASTERY,
+    MILESTONE,
+    SPECIAL_EVENTS,
+    ACHIEVEMENT_LEVEL
 }
+

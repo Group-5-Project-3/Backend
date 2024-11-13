@@ -27,17 +27,9 @@ public class User implements UserDetails {
     private String firstName;
     private String lastName;
 
-    private String profilePictureUrl; // URL of the user's profile picture
+    private String profilePictureUrl;
 
     private List<String> roles = new ArrayList<>();
-
-    // Lists to store IDs for related data
-    private List<String> reviewIds = new ArrayList<>();       // List of review IDs
-    private List<String> checkInIds = new ArrayList<>();      // List of check-in IDs
-    private List<String> favoriteTrailIds = new ArrayList<>();// List of favorite trail IDs
-    private List<String> badgeIds = new ArrayList<>();        // List of awarded badge IDs
-    private List<String> trailImageIds = new ArrayList<>();    // List of IDs for uploaded trail images
-
 
     // Default constructor
     public User() {}
@@ -116,46 +108,6 @@ public class User implements UserDetails {
 
     public void setRoles(List<String> roles) {
         this.roles = roles;
-    }
-
-    public List<String> getReviewIds() {
-        return reviewIds;
-    }
-
-    public void setReviewIds(List<String> reviewIds) {
-        this.reviewIds = reviewIds;
-    }
-
-    public List<String> getCheckInIds() {
-        return checkInIds;
-    }
-
-    public void setCheckInIds(List<String> checkInIds) {
-        this.checkInIds = checkInIds;
-    }
-
-    public List<String> getFavoriteTrailIds() {
-        return favoriteTrailIds;
-    }
-
-    public void setFavoriteTrailIds(List<String> favoriteTrailIds) {
-        this.favoriteTrailIds = favoriteTrailIds;
-    }
-
-    public List<String> getBadgeIds() {
-        return badgeIds;
-    }
-
-    public void setBadgeIds(List<String> badgeIds) {
-        this.badgeIds = badgeIds;
-    }
-
-    public List<String> getTrailImageIds() {
-        return trailImageIds;
-    }
-
-    public void setTrailImageIds(List<String> trailImageIds) {
-        this.trailImageIds = trailImageIds;
     }
 
     // Convert roles to GrantedAuthority objects for Spring Security
