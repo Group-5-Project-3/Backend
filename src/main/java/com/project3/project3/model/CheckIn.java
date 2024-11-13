@@ -10,8 +10,8 @@ public class CheckIn {
     @Id
     private String checkInId;
 
-    private String trailId;  // ID of the trail being checked into
-    private String userId;   // ID of the user checking in
+    private String trailId;
+    private String userId;
 
     private LocalDateTime timestamp;
 

@@ -10,8 +10,8 @@ public class UserBadge {
     @Id
     private String id;
 
-    private String userId;    // ID of the user who received the badge
-    private String badgeId;   // ID of the badge awarded
+    private String userId;
+    private String badgeId;
     private LocalDateTime awardedTimestamp;
 
     // Default constructor
