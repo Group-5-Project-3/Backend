@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserBadgeRepository extends MongoRepository<UserBadge, String> {
-    List<UserBadge> findByUserId(String userId); // Retrieve badges awarded to a user
-    List<UserBadge> findByBadgeId(String badgeId); // Retrieve users awarded a specific badge
+    List<UserBadge> findByUserId(String userId);
+    List<UserBadge> findByBadgeId(String badgeId);
     Optional<UserBadge> findByUserIdAndBadgeId(String userId, String badgeId);
 }
 
