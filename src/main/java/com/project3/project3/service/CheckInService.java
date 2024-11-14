@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
 
 @Service
 public class CheckInService {
@@ -31,11 +31,18 @@ public class CheckInService {
     }
 
     public CheckIn createCheckIn(CheckIn checkIn) {
+        checkIn.setTimestamp(LocalDateTime.now());
         return checkInRepository.save(checkIn);
     }
 
-    public void deleteCheckIn(String id) {
-        checkInRepository.deleteById(id);
+    public boolean deleteCheckIn(String id) {
+        if (checkInRepository.existsById(id)) {
+            checkInRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
+
 

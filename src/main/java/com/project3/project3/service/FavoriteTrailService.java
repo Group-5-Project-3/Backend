@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.time.LocalDateTime;
 
 @Service
 public class FavoriteTrailService {
@@ -22,11 +23,16 @@ public class FavoriteTrailService {
     }
 
     public FavoriteTrail addFavoriteTrail(FavoriteTrail favoriteTrail) {
+        favoriteTrail.setFavoritedTimestamp(LocalDateTime.now());
         return favoriteTrailRepository.save(favoriteTrail);
     }
 
-    public void removeFavoriteTrail(String id) {
-        favoriteTrailRepository.deleteById(id);
+    public boolean removeFavoriteTrail(String id) {
+        if (favoriteTrailRepository.existsById(id)) {
+            favoriteTrailRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
 

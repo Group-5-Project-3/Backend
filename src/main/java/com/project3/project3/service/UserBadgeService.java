@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.time.LocalDateTime;
 
 @Service
 public class UserBadgeService {
@@ -26,7 +27,8 @@ public class UserBadgeService {
         return userBadgeRepository.findByUserIdAndBadgeId(userId, badgeId);
     }
 
-    public UserBadge awardBadgeToUser(UserBadge userBadge) {
+    public UserBadge awardBadgeToUser(String userId, String badgeId) {
+        UserBadge userBadge = new UserBadge(userId, badgeId, LocalDateTime.now());
         return userBadgeRepository.save(userBadge);
     }
 

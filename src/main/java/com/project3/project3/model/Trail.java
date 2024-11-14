@@ -15,18 +15,13 @@ public class Trail {
     private String difficulty;
     private String description;
 
-    private double rating;
-
-    // Lists of related document IDs
-    private List<String> reviewIds;      // List of review IDs for the trail
-    private List<String> checkInIds;     // List of check-in IDs for the trail
-    private List<String> imageIds;       // List of image IDs for the trail
+    private Double rating;
 
     // Default constructor
     public Trail() {}
 
     // Constructor
-    public Trail(String name, String location, String difficulty, String description, double rating) {
+    public Trail(String name, String location, String difficulty, String description, Double rating) {
         this.name = name;
         this.location = location;
         this.difficulty = difficulty;
@@ -75,7 +70,7 @@ public class Trail {
         this.description = description;
     }
 
-    public double getRating() {
+    public Double getRating() {
         return rating;
     }
 
@@ -83,27 +78,4 @@ public class Trail {
         this.rating = rating;
     }
 
-    public List<String> getReviewIds() {
-        return reviewIds;
-    }
-
-    public void setReviewIds(List<String> reviewIds) {
-        this.reviewIds = reviewIds;
-    }
-
-    public List<String> getCheckInIds() {
-        return checkInIds;
-    }
-
-    public void setCheckInIds(List<String> checkInIds) {
-        this.checkInIds = checkInIds;
-    }
-
-    public List<String> getImageIds() {
-        return imageIds;
-    }
-
-    public void setImageIds(List<String> imageIds) {
-        this.imageIds = imageIds;
-    }
 }

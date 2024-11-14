@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/trail-images")
@@ -20,38 +21,42 @@ public class TrailImageController {
     @Autowired
     private ImageService imageService;
 
-    // Get all images for a specific trail
     @GetMapping("/trail/{trailId}")
     public ResponseEntity<List<TrailImage>> getImagesByTrailId(@PathVariable String trailId) {
-        return ResponseEntity.ok(trailImageService.getImagesByTrailId(trailId));
+        List<TrailImage> trailImages = trailImageService.getImagesByTrailId(trailId);
+        return ResponseEntity.ok(trailImages);
     }
 
-    // Get all images uploaded by a specific user
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<TrailImage>> getImagesByUserId(@PathVariable String userId) {
-        return ResponseEntity.ok(trailImageService.getImagesByUserId(userId));
+        List<TrailImage> userImages = trailImageService.getImagesByUserId(userId);
+        return ResponseEntity.ok(userImages);
     }
 
-    // Upload a new trail image
     @PostMapping("/upload")
     public ResponseEntity<TrailImage> uploadTrailImage(
             @RequestParam("file") MultipartFile file,
             @RequestParam("trailId") String trailId,
-            @RequestParam("userId") String userId) {
+            @RequestParam("userId") String userId,
+            @RequestParam("description") String description) {
         try {
             String imageUrl = imageService.uploadImage(file, System.getenv("BUCKET_NAME"), System.getenv("TRAIL_PIC_FOLDER"));
-            TrailImage savedTrailImage = trailImageService.saveTrailImage(imageUrl, trailId, userId);
+            TrailImage savedTrailImage = trailImageService.saveTrailImage(imageUrl, trailId, userId, description);
             return ResponseEntity.ok(savedTrailImage);
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
         }
     }
 
-    // Delete a trail image by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTrailImage(@PathVariable String id) {
-        trailImageService.deleteTrailImage(id);
-        return ResponseEntity.noContent().build();
+        boolean deleted = trailImageService.deleteTrailImage(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
+
 

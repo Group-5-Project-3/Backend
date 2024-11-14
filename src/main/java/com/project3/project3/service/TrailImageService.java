@@ -26,11 +26,12 @@ public class TrailImageService {
         return trailImageRepository.findByUserId(userId);
     }
 
-    public TrailImage saveTrailImage(String imageUrl, String trailId, String userId) {
+    public TrailImage saveTrailImage(String imageUrl, String trailId, String userId, String description) {
         TrailImage trailImage = new TrailImage();
         trailImage.setImageUrl(imageUrl);
         trailImage.setTrailId(trailId);
         trailImage.setUserId(userId);
+        trailImage.setDescription(description);
         return trailImageRepository.save(trailImage);
     }
 
@@ -38,8 +39,13 @@ public class TrailImageService {
         return trailImageRepository.findById(id);
     }
 
-    public void deleteTrailImage(String id) {
-        trailImageRepository.deleteById(id);
+    public boolean deleteTrailImage(String id) {
+        if(trailImageRepository.existsById(id)) {
+            trailImageRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
