@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -31,11 +32,17 @@ public class ReviewService {
     }
 
     public Review createReview(Review review) {
+        review.setTimestamp(LocalDateTime.now());
         return reviewRepository.save(review);
     }
 
-    public void deleteReview(String id) {
-        reviewRepository.deleteById(id);
+    public boolean deleteReview(String id) {
+        if (reviewRepository.existsById(id)) {
+            reviewRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     // Update an existing review by ID

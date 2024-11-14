@@ -35,7 +35,12 @@ public class TrailService {
         return trailRepository.save(trail);
     }
 
-    public void deleteTrail(String id) {
-        trailRepository.deleteById(id);
+    public boolean deleteTrail(String id) {
+        if(trailRepository.existsById(id)) {
+            trailRepository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

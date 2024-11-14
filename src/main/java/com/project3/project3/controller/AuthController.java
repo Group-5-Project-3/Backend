@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -35,12 +36,18 @@ public class AuthController {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())
             );
+
             UserDetails userDetails = userService.loadUserByUsername(authRequest.getUsername());
-            String userId = userService.findUserByUsername(authRequest.getUsername())
-                    .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + authRequest.getUsername()))
-                    .getId();
-            String token = jwtService.generateToken(userId, userDetails.getAuthorities());
-            return ResponseEntity.ok(new AuthResponse(token));
+            Optional<User> userOptional = userService.findUserByUsername(authRequest.getUsername());
+
+            if (userOptional.isPresent()) {
+                String userId = userOptional.get().getId();
+                String token = jwtService.generateToken(userId, userDetails.getAuthorities());
+                return ResponseEntity.ok(new AuthResponse(token));
+            } else {
+                return ResponseEntity.status(404).body("User not found with username: " + authRequest.getUsername());
+            }
+
         } catch (AuthenticationException e) {
             return ResponseEntity.status(401).body("Invalid username or password");
         } catch (Exception ex) {
@@ -51,16 +58,13 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
         try {
-            // Set the default role
             user.setRoles(Collections.singletonList("ROLE_USER"));
-
-            // Save the user (ensure password hashing with BCrypt)
             userService.saveUser(user);
-
             return ResponseEntity.ok("User registered successfully. Please log in.");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("An error occurred while creating the account.");
         }
     }
 }
+
 

@@ -20,29 +20,42 @@ public class AdminController {
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        Optional<User> createdUser = Optional.ofNullable(userService.saveUser(user));
-        return createdUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        User createdUser = userService.saveUser(user);
+        if (createdUser != null) {
+            return ResponseEntity.ok(createdUser);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User updatedUser) {
         Optional<User> user = userService.updateUser(id, updatedUser);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}/{role}")
     public ResponseEntity<User> assignRoleToUser(@PathVariable String id, @PathVariable String role) {
-        return userService.assignRole(id, role)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        Optional<User> user = userService.assignRole(id, role);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
-
 
     @DeleteMapping("/{id}/{role}")
     public ResponseEntity<User> removeRoleFromUser(@PathVariable String id, @PathVariable String role) {
-        return userService.removeRole(id, role)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        Optional<User> user = userService.removeRole(id, role);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping
@@ -54,6 +67,10 @@ public class AdminController {
     @GetMapping("/{id}/roles")
     public ResponseEntity<List<String>> getUserRoles(@PathVariable String id) {
         Optional<List<String>> roles = userService.getUserRoles(id).map(List::copyOf);
-        return roles.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        if (roles.isPresent()) {
+            return ResponseEntity.ok(roles.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

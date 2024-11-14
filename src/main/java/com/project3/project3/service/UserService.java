@@ -84,26 +84,26 @@ public class UserService implements UserDetailsService {
 
     public Optional<User> updateUser(String id, User updatedUser) {
         return userRepository.findById(id).map(user -> {
-            if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+            if (updatedUser.getPassword() != null) {
                 String hashedPassword = passwordEncoder.encode(updatedUser.getPassword());
                 user.setPassword(hashedPassword);
             }
-            if (updatedUser.getUsername() != null && !updatedUser.getUsername().isEmpty()) {
+            if (updatedUser.getUsername() != null) {
                 user.setUsername(updatedUser.getUsername());
             }
-            if (updatedUser.getEmail() != null && !updatedUser.getEmail().isEmpty()) {
+            if (updatedUser.getEmail() != null) {
                 user.setEmail(updatedUser.getEmail());
             }
-            if (updatedUser.getFirstName() != null && !updatedUser.getFirstName().isEmpty()) {
+            if (updatedUser.getFirstName() != null) {
                 user.setFirstName(updatedUser.getFirstName());
             }
-            if (updatedUser.getLastName() != null && !updatedUser.getLastName().isEmpty()) {
+            if (updatedUser.getLastName() != null) {
                 user.setLastName(updatedUser.getLastName());
             }
             if (updatedUser.getProfilePictureUrl() != null) {
                 user.setProfilePictureUrl(updatedUser.getProfilePictureUrl());
             }
-            if (updatedUser.getRoles() != null && !updatedUser.getRoles().isEmpty()) {
+            if (updatedUser.getRoles() != null) {
                 user.setRoles(updatedUser.getRoles());
             }
             return userRepository.save(user);
@@ -123,10 +123,6 @@ public class UserService implements UserDetailsService {
             return true;
         }
         return false;
-    }
-
-    public void deleteUser(User user) {
-        userRepository.delete(user);
     }
 
     public Optional<User> removeRole(String userId, String role) {
