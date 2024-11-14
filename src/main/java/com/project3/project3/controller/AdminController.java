@@ -18,7 +18,7 @@ public class AdminController {
     @Autowired
     private UserService userService;
 
-    @PostMapping
+    @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody User user) {
         Optional<User> createdUser = Optional.ofNullable(userService.saveUser(user));
         return createdUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
@@ -36,7 +36,6 @@ public class AdminController {
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 
     @DeleteMapping("/{id}/{role}")
     public ResponseEntity<User> removeRoleFromUser(@PathVariable String id, @PathVariable String role) {
