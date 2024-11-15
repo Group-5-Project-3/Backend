@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/trails")
@@ -15,36 +16,42 @@ public class TrailController {
     @Autowired
     private TrailService trailService;
 
-    // Get all trails
     @GetMapping
     public ResponseEntity<List<Trail>> getAllTrails() {
-        return ResponseEntity.ok(trailService.getAllTrails());
+        List<Trail> trails = trailService.getAllTrails();
+        return ResponseEntity.ok(trails);
     }
 
-    // Get a specific trail by ID
     @GetMapping("/{id}")
     public ResponseEntity<Trail> getTrailById(@PathVariable String id) {
-        return trailService.getTrailById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Optional<Trail> trail = trailService.getTrailById(id);
+        if (trail.isPresent()) {
+            return ResponseEntity.ok(trail.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // Create a new trail
     @PostMapping
     public ResponseEntity<Trail> createTrail(@RequestBody Trail trail) {
-        return ResponseEntity.ok(trailService.createTrail(trail));
+        Trail createdTrail = trailService.createTrail(trail);
+        return ResponseEntity.ok(createdTrail);
     }
 
-    // Update a trail
     @PutMapping("/{id}")
     public ResponseEntity<Trail> updateTrail(@PathVariable String id, @RequestBody Trail trail) {
-        return ResponseEntity.ok(trailService.updateTrail(id, trail));
+        Trail updatedTrail = trailService.updateTrail(id, trail);
+        return ResponseEntity.ok(updatedTrail);
     }
 
-    // Delete a trail by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTrail(@PathVariable String id) {
-        trailService.deleteTrail(id);
-        return ResponseEntity.noContent().build();
+        boolean deleted = trailService.deleteTrail(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
+

@@ -21,55 +21,68 @@ public class UserController {
     @Autowired
     private ImageService imageService;
 
-    // Find user ID by username
     @GetMapping("/username/{username}")
     public ResponseEntity<String> findUserIdByUsername(@PathVariable String username) {
         Optional<User> user = userService.findUserByUsername(username);
-        return user.map(u -> ResponseEntity.ok(u.getId())).orElseGet(() -> ResponseEntity.notFound().build());
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get().getId());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // Find user by ID
     @GetMapping("/{id}")
     public ResponseEntity<User> findUserById(@PathVariable String id) {
         Optional<User> user = userService.getUserById(id);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // Find user by email
     @GetMapping("/email/{email}")
     public ResponseEntity<User> findUserByEmail(@PathVariable String email) {
         Optional<User> user = userService.findUserByEmail(email);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // Get all users
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
-        return ResponseEntity.ok(userService.getAllUsers());
+        List<User> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
     }
 
-    // Create a new user
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User createdUser = userService.saveUser(user);
         return ResponseEntity.ok(createdUser);
     }
 
-    // Update a user by ID
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User updatedUser) {
         Optional<User> user = userService.updateUser(id, updatedUser);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // Delete a user by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable String id) {
         boolean deleted = userService.deleteUserById(id);
-        return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // Upload a profile picture
     @PostMapping("/{id}/profile-picture")
     public ResponseEntity<User> uploadProfilePicture(
             @PathVariable String id,
@@ -77,9 +90,14 @@ public class UserController {
         try {
             String profileImageUrl = imageService.uploadImage(file, System.getenv("BUCKET_NAME"), System.getenv("PROFILE_PIC_FOLDER"));
             Optional<User> updatedUser = userService.updateProfilePicture(id, profileImageUrl);
-            return updatedUser.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+            if (updatedUser.isPresent()) {
+                return ResponseEntity.ok(updatedUser.get());
+            } else {
+                return ResponseEntity.notFound().build();
+            }
         } catch (Exception e) {
             return ResponseEntity.status(500).build();
         }
     }
 }
+

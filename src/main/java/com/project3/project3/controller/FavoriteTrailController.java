@@ -16,13 +16,11 @@ public class FavoriteTrailController {
     @Autowired
     private FavoriteTrailService favoriteTrailService;
 
-    // Get all favorite trails for a specific user
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<FavoriteTrail>> getUserFavorites(@PathVariable String userId) {
         return ResponseEntity.ok(favoriteTrailService.getFavoritesByUserId(userId));
     }
 
-    // Add a trail to user's favorites
     @PostMapping
     public ResponseEntity<FavoriteTrail> addFavoriteTrail(
             @RequestParam String userId,
@@ -31,12 +29,16 @@ public class FavoriteTrailController {
         return ResponseEntity.ok(favoriteTrailService.addFavoriteTrail(favoriteTrail));
     }
 
-    // Remove a favorite trail by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeFavoriteTrail(@PathVariable String id) {
-        favoriteTrailService.removeFavoriteTrail(id);
-        return ResponseEntity.noContent().build();
+        boolean deleted = favoriteTrailService.removeFavoriteTrail(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
+
 
 

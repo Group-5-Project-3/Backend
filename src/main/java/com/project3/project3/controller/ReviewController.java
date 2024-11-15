@@ -16,35 +16,42 @@ public class ReviewController {
     @Autowired
     private ReviewService reviewService;
 
-    // Get all reviews for a specific trail
     @GetMapping("/trail/{trailId}")
     public ResponseEntity<List<Review>> getTrailReviews(@PathVariable String trailId) {
-        return ResponseEntity.ok(reviewService.getReviewsByTrailId(trailId));
+        List<Review> reviews = reviewService.getReviewsByTrailId(trailId);
+        return ResponseEntity.ok(reviews);
     }
 
-    // Get all reviews for a specific user
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Review>> getUserReviews(@PathVariable String userId) {
-        return ResponseEntity.ok(reviewService.getReviewsByUserId(userId));
+        List<Review> reviews = reviewService.getReviewsByUserId(userId);
+        return ResponseEntity.ok(reviews);
     }
 
-    // Create a new review
     @PostMapping
     public ResponseEntity<Review> createReview(@RequestBody Review review) {
-        return ResponseEntity.ok(reviewService.createReview(review));
+        Review createdReview = reviewService.createReview(review);
+        return ResponseEntity.ok(createdReview);
     }
 
-    // Update an existing review
     @PutMapping("/{id}")
-    public ResponseEntity<Optional<Review>> updateReview(@PathVariable String id, @RequestBody Review review) {
-        return ResponseEntity.ok(reviewService.updateReview(id, review));
+    public ResponseEntity<Review> updateReview(@PathVariable String id, @RequestBody Review review) {
+        Optional<Review> updatedReview = reviewService.updateReview(id, review);
+        if (updatedReview.isPresent()) {
+            return ResponseEntity.ok(updatedReview.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
-    // Delete a review by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReview(@PathVariable String id) {
-        reviewService.deleteReview(id);
-        return ResponseEntity.noContent().build();
+        boolean deleted = reviewService.deleteReview(id);
+        if (deleted) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
 
