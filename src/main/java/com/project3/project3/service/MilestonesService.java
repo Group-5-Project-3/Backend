@@ -17,24 +17,20 @@ public class MilestonesService {
         this.milestonesRepository = milestonesRepository;
     }
 
-    // Create or initialize milestones for a new user
     public Milestones createMilestones(String userId) {
-        Milestones milestones = new Milestones(userId, 0, 0.0, 0, 0.0, 0, 0);
+        Milestones milestones = new Milestones(userId, 0, 0.0, 0, 0.0, 0);
         return milestonesRepository.save(milestones);
     }
 
-    // Retrieve milestones by userId
     public Optional<Milestones> getMilestonesByUserId(String userId) {
         return milestonesRepository.findByUserId(userId);
     }
 
-    // Update milestones by userId with partial updates
     public Milestones updateMilestones(String userId, Milestones updatedMilestones) {
         Optional<Milestones> existingMilestones = milestonesRepository.findByUserId(userId);
         if (existingMilestones.isPresent()) {
             Milestones milestones = existingMilestones.get();
 
-            // Update only fields that are not null in updatedMilestones
             if (updatedMilestones.getTotalHikes() != null) {
                 milestones.setTotalHikes(updatedMilestones.getTotalHikes());
             }
@@ -47,21 +43,16 @@ public class MilestonesService {
             if (updatedMilestones.getTotalElevationGain() != null) {
                 milestones.setTotalElevationGain(updatedMilestones.getTotalElevationGain());
             }
-            if (updatedMilestones.getConsecutiveDaysHiked() != null) {
-                milestones.setConsecutiveDaysHiked(updatedMilestones.getConsecutiveDaysHiked());
-            }
             if (updatedMilestones.getNationalParksVisited() != null) {
                 milestones.setNationalParksVisited(updatedMilestones.getNationalParksVisited());
             }
 
             return milestonesRepository.save(milestones);
         } else {
-            // Create new milestones if not found
             return milestonesRepository.save(updatedMilestones);
         }
     }
 
-    // Increment methods for specific fields
     public Milestones incrementTotalHikes(String userId) {
         Optional<Milestones> milestones = milestonesRepository.findByUserId(userId);
         if (milestones.isPresent()) {
@@ -82,7 +73,6 @@ public class MilestonesService {
         return null;
     }
 
-    // Delete milestones by userId
     public void deleteMilestonesByUserId(String userId) {
         milestonesRepository.findByUserId(userId).ifPresent(milestonesRepository::delete);
     }

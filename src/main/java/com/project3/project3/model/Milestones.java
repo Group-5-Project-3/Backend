@@ -12,19 +12,17 @@ public class Milestones {
     private Double totalDistance;
     private Integer uniqueTrails;
     private Double totalElevationGain;
-    private Integer consecutiveDaysHiked;
     private Integer nationalParksVisited;
 
     // Constructors
     public Milestones() {}
 
-    public Milestones(String userId, Integer totalHikes, Double totalDistance, Integer uniqueTrails, Double totalElevationGain, Integer consecutiveDaysHiked, Integer nationalParksVisited) {
+    public Milestones(String userId, Integer totalHikes, Double totalDistance, Integer uniqueTrails, Double totalElevationGain, Integer nationalParksVisited) {
         this.userId = userId;
         this.totalHikes = totalHikes;
         this.totalDistance = totalDistance;
         this.uniqueTrails = uniqueTrails;
         this.totalElevationGain = totalElevationGain;
-        this.consecutiveDaysHiked = consecutiveDaysHiked;
         this.nationalParksVisited = nationalParksVisited;
     }
 
@@ -68,14 +66,6 @@ public class Milestones {
 
     public void setTotalElevationGain(Double totalElevationGain) {
         this.totalElevationGain = totalElevationGain;
-    }
-
-    public Integer getConsecutiveDaysHiked() {
-        return consecutiveDaysHiked;
-    }
-
-    public void setConsecutiveDaysHiked(Integer consecutiveDaysHiked) {
-        this.consecutiveDaysHiked = consecutiveDaysHiked;
     }
 
     public Integer getNationalParksVisited() {
