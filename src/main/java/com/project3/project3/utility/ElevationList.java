@@ -1,8 +1,10 @@
 package com.project3.project3.utility;
 
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
-
+@Component
 public class ElevationList {
 
     public static final Map<Double, String> ELEVATION_MILESTONES = new HashMap<>();
@@ -22,7 +24,7 @@ public class ElevationList {
         ELEVATION_MILESTONES.put(100000.0, "badge_id_for_100000m");
     }
 
-    public String getBadgeIdForElevation(double elevationGain) {
+    public static String getBadgeIdForElevation(double elevationGain) {
         return ELEVATION_MILESTONES.get(elevationGain);
     }
 }

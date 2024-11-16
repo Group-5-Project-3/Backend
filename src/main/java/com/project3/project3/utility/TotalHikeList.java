@@ -20,7 +20,7 @@ public class TotalHikeList {
         HIKE_MILESTONES.put(1000, "badge_id_for_1000_hikes");
     }
 
-    public String getBadgeIdForHikes(int hikes) {
+    public static String getBadgeIdForHikes(int hikes) {
         return HIKE_MILESTONES.get(hikes);
     }
 }

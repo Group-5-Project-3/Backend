@@ -1,9 +1,11 @@
 package com.project3.project3.utility;
 
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
+@Component
 public class NationalParksList {
 
     public static final Set<String> CA_NATIONAL_PARKS = Set.of(
@@ -32,11 +34,11 @@ public class NationalParksList {
         PARK_BADGE_IDS.put("Yosemite National Park", "badge_id_yosemite");
     }
 
-    public boolean isCaliforniaNationalPark(String parkName) {
+    public static boolean isCaliforniaNationalPark(String parkName) {
         return CA_NATIONAL_PARKS.contains(parkName);
     }
 
-    public String getBadgeIdForPark(String parkName) {
+    public static String getBadgeIdForPark(String parkName) {
         return PARK_BADGE_IDS.get(parkName);
     }
 }

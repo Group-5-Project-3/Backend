@@ -1,8 +1,10 @@
 package com.project3.project3.utility;
 
+import org.springframework.stereotype.Component;
+
 import java.util.HashMap;
 import java.util.Map;
-
+@Component
 public class DistanceList {
     public static final Map<Double, String> DISTANCE_MILESTONES = new HashMap<>();
 
@@ -21,7 +23,7 @@ public class DistanceList {
         DISTANCE_MILESTONES.put(1000.0, "badge_id_for_1000_km_distance");
     }
 
-    public String getBadgeIdForDistance(double distance) {
+    public static String getBadgeIdForDistance(double distance) {
         return DISTANCE_MILESTONES.get(distance);
     }
 }
