@@ -15,8 +15,6 @@ public class Trail {
     private String location;
     private String description;
 
-    private Double rating;
-
     // Default constructor
     public Trail() {}
 
@@ -26,7 +24,6 @@ public class Trail {
         this.name = name;
         this.location = location;
         this.description = description;
-        this.rating = rating;
     }
 
     // Getters and Setters
@@ -66,14 +63,6 @@ public class Trail {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public Double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
     }
 
 }
