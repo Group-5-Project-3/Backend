@@ -13,24 +13,31 @@ import java.util.Optional;
 public class HikeService {
 
     private final HikeRepository hikeRepository;
+    private final MilestonesService milestonesService;
 
     @Autowired
-    public HikeService(HikeRepository hikeRepository) {
+    public HikeService(HikeRepository hikeRepository, MilestonesService milestonesService) {
         this.hikeRepository = hikeRepository;
+        this.milestonesService = milestonesService;
     }
 
     // Create a new hike and set start time
     public Hike startHike(Hike hike) {
         hike.setStartTime(LocalDateTime.now());
+        String userId = hike.getUserId();
+        milestonesService.incrementTotalHikes(userId);
         return hikeRepository.save(hike);
     }
 
-    public Optional<Hike> completeHike(String hikeId, double distance, double elevationGain, String polyline) {
+    public Optional<Hike> completeHike(String hikeId, Double distance, Double elevationGain, String polyline) {
         return hikeRepository.findById(hikeId).map(existingHike -> {
             existingHike.setEndTime(LocalDateTime.now());
             existingHike.setDistance(distance);
             existingHike.setElevationGain(elevationGain);
             existingHike.setPolyline(polyline);
+            String userId = existingHike.getUserId();
+            milestonesService.incrementDistance(userId, distance);
+            milestonesService.incrementElevationGain(userId, elevationGain);
             return hikeRepository.save(existingHike);
         });
     }
