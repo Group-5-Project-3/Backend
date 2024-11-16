@@ -4,6 +4,7 @@ import com.project3.project3.model.AuthRequest;
 import com.project3.project3.model.AuthResponse;
 import com.project3.project3.model.User;
 import com.project3.project3.service.JwtService;
+import com.project3.project3.service.MilestonesService;
 import com.project3.project3.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 import java.util.Collections;
 import java.util.Optional;
@@ -28,6 +28,9 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MilestonesService milestonesService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody AuthRequest authRequest) {
@@ -59,7 +62,8 @@ public class AuthController {
     public ResponseEntity<?> register(@RequestBody User user) {
         try {
             user.setRoles(Collections.singletonList("ROLE_USER"));
-            userService.saveUser(user);
+            User savedUser = userService.saveUser(user);
+            milestonesService.createMilestones(savedUser.getId());
             return ResponseEntity.ok("User registered successfully. Please log in.");
         } catch (Exception e) {
             return ResponseEntity.status(500).body("An error occurred while creating the account.");

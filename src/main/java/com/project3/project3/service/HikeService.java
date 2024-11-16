@@ -26,7 +26,6 @@ public class HikeService {
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
-    // Create a new hike and set start time
     public Hike startHike(Hike hike) {
         hike.setStartTime(LocalDateTime.now());
         String userId = hike.getUserId();
@@ -35,7 +34,6 @@ public class HikeService {
     }
 
     public Optional<Hike> completeHike(String hikeId, Double distance, Double elevationGain, List<List<Double>> coordinates) {
-        // Add polyline conversion here
         String polyline = Polyline.encode(coordinates);
         return hikeRepository.findById(hikeId).map(existingHike -> {
             existingHike.setEndTime(LocalDateTime.now());
@@ -50,22 +48,18 @@ public class HikeService {
         });
     }
 
-    // Get all hikes for a specific user
     public List<Hike> getHikesByUserId(String userId) {
         return hikeRepository.findByUserId(userId);
     }
 
-    // Get all hikes for a specific trail
     public List<Hike> getHikesByTrailId(String trailId) {
         return hikeRepository.findByTrailId(trailId);
     }
 
-    // Find a specific hike by ID
     public Optional<Hike> getHikeById(String hikeId) {
         return hikeRepository.findById(hikeId);
     }
 
-    // Update an existing hike
     public Optional<Hike> updateHike(String hikeId, Hike updatedHike) {
         return hikeRepository.findById(hikeId).map(existingHike -> {
             if (updatedHike.getStartTime() != null) {
@@ -87,7 +81,6 @@ public class HikeService {
         });
     }
 
-    // Delete a hike by ID
     public boolean deleteHikeById(String hikeId) {
         if (hikeRepository.existsById(hikeId)) {
             hikeRepository.deleteById(hikeId);
