@@ -12,6 +12,7 @@ public class Review {
 
     private String trailId;
     private String userId;
+    private Double difficultyRating;
 
     private Double rating;
     private String comment;
@@ -21,9 +22,10 @@ public class Review {
     public Review() {}
 
     // Constructor
-    public Review(String trailId, String userId, Double rating, String comment, LocalDateTime timestamp) {
+    public Review(String trailId, String userId, Double difficultyRating, Double rating, String comment, LocalDateTime timestamp) {
         this.trailId = trailId;
         this.userId = userId;
+        this.difficultyRating = difficultyRating;
         this.rating = rating;
         this.comment = comment;
         this.timestamp = timestamp;
@@ -52,6 +54,12 @@ public class Review {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+    public Double getDifficultyRating() {
+        return difficultyRating;
+    }
+    public void setDifficultyRating(Double difficultyRating) {
+        this.difficultyRating = difficultyRating;
     }
 
     public Double getRating() {
