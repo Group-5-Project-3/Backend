@@ -28,6 +28,19 @@ public class ReviewService {
     public List<Review> getReviewsByTrailId(String trailId) {
         return reviewRepository.findByTrailId(trailId);
     }
+    public Double calculateAverageDifficulty(String trailId) {
+        List<Review> reviews = reviewRepository.findByTrailId(trailId);
+        double totalDifficulty = 0.0;
+        int count = 0;
+
+        for (Review review : reviews) {
+            if (review.getDifficultyRating() != null) {
+                totalDifficulty += review.getDifficultyRating();
+                count++;
+            }
+        }
+        return count > 0 ? totalDifficulty / count : 0.0;
+    }
 
     // Retrieve reviews by user ID
     public List<Review> getReviewsByUserId(String userId) {
