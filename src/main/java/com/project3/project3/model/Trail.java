@@ -9,6 +9,7 @@ public class Trail {
 
     @Id
     private String trailId;
+    private String placesId;
 
     private String name;
     private String location;
@@ -21,7 +22,8 @@ public class Trail {
     public Trail() {}
 
     // Constructor
-    public Trail(String name, String location, String difficulty, String description, Double rating) {
+    public Trail(String placesId, String name, String location, String difficulty, String description, Double rating) {
+        this.placesId = placesId;
         this.name = name;
         this.location = location;
         this.difficulty = difficulty;
@@ -36,6 +38,12 @@ public class Trail {
 
     public void setTrailId(String trailId) {
         this.trailId = trailId;
+    }
+    public String getPlacesId() {
+        return placesId;
+    }
+    public void setPlacesId(String placesId) {
+        this.placesId = placesId;
     }
 
     public String getName() {

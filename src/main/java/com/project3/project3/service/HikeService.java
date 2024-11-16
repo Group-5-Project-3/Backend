@@ -2,6 +2,7 @@ package com.project3.project3.service;
 
 import com.project3.project3.model.Hike;
 import com.project3.project3.repository.HikeRepository;
+import com.project3.project3.utility.Polyline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,9 @@ public class HikeService {
         return hikeRepository.save(hike);
     }
 
-    public Optional<Hike> completeHike(String hikeId, Double distance, Double elevationGain, String polyline) {
+    public Optional<Hike> completeHike(String hikeId, Double distance, Double elevationGain, List<List<Double>> coordinates) {
+        // Add polyline conversion here
+        String polyline = Polyline.encode(coordinates);
         return hikeRepository.findById(hikeId).map(existingHike -> {
             existingHike.setEndTime(LocalDateTime.now());
             existingHike.setDistance(distance);
