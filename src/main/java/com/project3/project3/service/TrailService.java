@@ -26,6 +26,10 @@ public class TrailService {
         return trailRepository.findById(id);
     }
 
+    public Optional<Trail> getTrailByPlacesId(String placesId) {
+        return trailRepository.findByPlacesId(placesId);
+    }
+
     public Trail createTrail(Trail trail) {
         return trailRepository.save(trail);
     }

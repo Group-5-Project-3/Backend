@@ -31,6 +31,16 @@ public class TrailController {
             return ResponseEntity.notFound().build();
         }
     }
+    
+    @GetMapping("/places/{placesId}")
+    public ResponseEntity<Trail> getTrailByPlacesId(@PathVariable String placesId) {
+        Optional<Trail> trail = trailService.getTrailByPlacesId(placesId);
+        if (trail.isPresent()) {
+            return ResponseEntity.ok(trail.get());
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @PostMapping
     public ResponseEntity<Trail> createTrail(@RequestBody Trail trail) {
