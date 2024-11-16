@@ -5,5 +5,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Optional;
 
 public interface MilestonesRepository extends MongoRepository<Milestones, String> {
-    Optional<Milestones> findByUserId(String userId);
+    Milestones findByUserId(String userId);
 }

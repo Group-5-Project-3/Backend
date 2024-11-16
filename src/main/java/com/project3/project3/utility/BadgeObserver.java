@@ -4,6 +4,7 @@ import com.project3.project3.model.Milestones;
 import com.project3.project3.service.MilestonesService;
 import com.project3.project3.service.UserBadgeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -24,6 +25,23 @@ public class BadgeObserver {
         this.distanceList = d;
         this.elevationList = e;
         this.totalHikeList = t;
+    }
+
+    @EventListener
+    public void onHikeEvent(HikeEvent event) {
+        String userId = event.getUserId();
+
+        Milestones milestones = milestonesService.getMilestonesByUserId(userId);
+        checkAndAwardDistanceBadge(milestones);
+        checkAndAwardElevationBadge(milestones);
+        checkAndAwardTotalHikeBadge(milestones);
+    }
+
+    @EventListener
+    public void onCheckInEvent(CheckInEvent event) {
+        String userId = event.getUserId();
+        String parkName = event.getParkName();
+        checkAndAwardNationalParkBadge(userId, parkName);
     }
 
     public void checkAndAwardDistanceBadge(Milestones milestones) {

@@ -10,8 +10,8 @@ public class Review {
     @Id
     private String reviewId;
 
-    private String trailId;  // ID of the trail being reviewed
-    private String userId;   // ID of the user who wrote the review
+    private String trailId;
+    private String userId;
 
     private Double rating;
     private String comment;

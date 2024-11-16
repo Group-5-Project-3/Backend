@@ -2,8 +2,10 @@ package com.project3.project3.service;
 
 import com.project3.project3.model.Hike;
 import com.project3.project3.repository.HikeRepository;
+import com.project3.project3.utility.HikeEvent;
 import com.project3.project3.utility.Polyline;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -15,11 +17,13 @@ public class HikeService {
 
     private final HikeRepository hikeRepository;
     private final MilestonesService milestonesService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Autowired
-    public HikeService(HikeRepository hikeRepository, MilestonesService milestonesService) {
+    public HikeService(HikeRepository hikeRepository, MilestonesService milestonesService, ApplicationEventPublisher applicationEventPublisher) {
         this.hikeRepository = hikeRepository;
         this.milestonesService = milestonesService;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     // Create a new hike and set start time
@@ -41,6 +45,7 @@ public class HikeService {
             String userId = existingHike.getUserId();
             milestonesService.incrementDistance(userId, distance);
             milestonesService.incrementElevationGain(userId, elevationGain);
+            applicationEventPublisher.publishEvent(new HikeEvent(this, userId));
             return hikeRepository.save(existingHike);
         });
     }
