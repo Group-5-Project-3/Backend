@@ -144,4 +144,14 @@ public class UserService implements UserDetailsService {
             return userRepository.save(user);
         });
     }
+    public User findOrCreateGoogleUser(User googleUser) {
+        Optional<User> existingUser = userRepository.findByEmail(googleUser.getEmail());
+        if (existingUser.isPresent()) {
+            return existingUser.get();
+        }
+        googleUser.setRoles(Collections.singletonList("ROLE_USER"));
+        googleUser.setPassword("");
+        return userRepository.save(googleUser);
+    }
+
 }

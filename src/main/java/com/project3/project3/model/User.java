@@ -17,35 +17,46 @@ public class User implements UserDetails {
     private String id;
 
     @Indexed(unique = true, sparse = true)
-    private String username;
+    private String username; // Optional for Google users
 
-    private String password;
+    private String password; // Optional for Google users
 
     @Indexed(unique = true, sparse = true)
     private String email;
 
+    private String googleUserId;
+
     private String firstName;
     private String lastName;
-
+    private String googleName;
     private String profilePictureUrl;
-
     private List<String> roles = new ArrayList<>();
 
     // Default constructor
     public User() {}
 
-    // Constructor with role strings
-    public User(String username, String password, String email, String firstName, String lastName, String profilePictureUrl, List<String> roles) {
-        this.username = username;
-        this.password = password;
+    // Constructor for Google users
+    public User(String email, String googleUserId, String googleName, String profilePictureUrl, List<String> roles) {
         this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.googleUserId = googleUserId;
+        this.googleName = googleName;
         this.profilePictureUrl = profilePictureUrl;
         this.roles = roles;
     }
 
     // Getters and Setters
+    public String getGoogleUserId() {
+        return googleUserId;
+    }
+
+    public void setGoogleUserId(String googleUserId) {
+        this.googleUserId = googleUserId;
+    }
+
+    public void setName(String googleName) {
+        this.googleName = googleName;
+    }
+
     public String getId() {
         return id;
     }
@@ -56,6 +67,10 @@ public class User implements UserDetails {
 
     public String getUsername() {
         return username;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 
     public void setUsername(String username) {
@@ -110,7 +125,6 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
-    // Convert roles to GrantedAuthority objects for Spring Security
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
@@ -138,4 +152,6 @@ public class User implements UserDetails {
         return true;
     }
 }
+
+
 
