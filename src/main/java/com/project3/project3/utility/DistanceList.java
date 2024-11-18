@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
-@Component
+
 public class DistanceList {
     public static final Map<Double, String> DISTANCE_MILESTONES = new HashMap<>();
 

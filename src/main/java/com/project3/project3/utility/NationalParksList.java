@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-@Component
+
 public class NationalParksList {
 
     public static final Set<String> CA_NATIONAL_PARKS = Set.of(
