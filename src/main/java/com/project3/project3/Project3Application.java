@@ -9,9 +9,6 @@ public class Project3Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(Project3Application.class, args);
-
-		// Call the static method directly to initialize badges
-		BadgeInitializer.initializeBadges();
 	}
 }
 

@@ -1,15 +1,29 @@
 package com.project3.project3.utility;
 
-public class BadgeInitializer {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
-    private static final BadgeUtility badgeUtility = new BadgeUtility();
+@Component
+public class BadgeInitializer implements CommandLineRunner {
 
-    public static void initializeBadges() {
-        badgeUtility.createNationalParksBadge();
-        badgeUtility.createDistanceBadge();
-        badgeUtility.createElevationBadge();
-        badgeUtility.createTotalHikesBadge();
+    private final BadgeUtility badgeUtility;
+
+    @Autowired
+    public BadgeInitializer(BadgeUtility badgeUtility) {
+        this.badgeUtility = badgeUtility;
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+        // Call each badge creation method (only runs once at startup)
+        badgeUtility.createNationalParksBadges();
+        badgeUtility.createDistanceBadges();
+        badgeUtility.createElevationBadges();
+        badgeUtility.createTotalHikesBadges();
     }
 }
+
+
 
 
