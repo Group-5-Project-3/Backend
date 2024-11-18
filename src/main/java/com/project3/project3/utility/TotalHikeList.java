@@ -7,17 +7,17 @@ public class TotalHikeList {
     public static final Map<Integer, String> HIKE_MILESTONES = new HashMap<>();
 
     static {
-        HIKE_MILESTONES.put(1, "badge_id_for_1_hike");
-        HIKE_MILESTONES.put(10, "badge_id_for_10_hikes");
-        HIKE_MILESTONES.put(25, "badge_id_for_25_hikes");
-        HIKE_MILESTONES.put(50, "badge_id_for_50_hikes");
-        HIKE_MILESTONES.put(75, "badge_id_for_75_hikes");
-        HIKE_MILESTONES.put(100, "badge_id_for_100_hikes");
-        HIKE_MILESTONES.put(150, "badge_id_for_150_hikes");
-        HIKE_MILESTONES.put(200, "badge_id_for_200_hikes");
-        HIKE_MILESTONES.put(300, "badge_id_for_300_hikes");
-        HIKE_MILESTONES.put(750, "badge_id_for_750_hikes");
-        HIKE_MILESTONES.put(1000, "badge_id_for_1000_hikes");
+        HIKE_MILESTONES.put(1, "673bc2f213b4332cc0525196");
+        HIKE_MILESTONES.put(10, "673bc2f213b4332cc0525197");
+        HIKE_MILESTONES.put(25, "673bc2f213b4332cc0525198");
+        HIKE_MILESTONES.put(50, "673bc2f213b4332cc0525199");
+        HIKE_MILESTONES.put(75, "673bc2f213b4332cc052519a");
+        HIKE_MILESTONES.put(100, "673bc2f213b4332cc052519b");
+        HIKE_MILESTONES.put(150, "673bc2f213b4332cc052519c");
+        HIKE_MILESTONES.put(200, "673bc2f213b4332cc052519d");
+        HIKE_MILESTONES.put(300, "673bc2f213b4332cc052519e");
+        HIKE_MILESTONES.put(750, "673bc2f213b4332cc052519f");
+        HIKE_MILESTONES.put(1000, "673bc2f213b4332cc05251a0");
     }
 
     public static String getBadgeIdForHikes(int hikes) {
