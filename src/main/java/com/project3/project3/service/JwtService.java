@@ -1,9 +1,10 @@
 package com.project3.project3.service;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
@@ -21,17 +22,7 @@ public class JwtService {
     private final SecretKey SECRET_KEY;
 
     public JwtService() {
-        // Check system environment first, then fallback to Dotenv for local development
         String secretKey = System.getenv("JWT_SECRET");
-        if (secretKey == null || secretKey.isEmpty()) {
-            Dotenv dotenv = Dotenv.configure().load();
-            secretKey = dotenv.get("JWT_SECRET");
-        }
-
-        if (secretKey == null || secretKey.isEmpty()) {
-            throw new IllegalArgumentException("JWT_SECRET environment variable is not set or empty.");
-        }
-
         byte[] decodedKey = Base64.getDecoder().decode(secretKey);
         this.SECRET_KEY = Keys.hmacShaKeyFor(decodedKey);
     }
@@ -91,3 +82,4 @@ public class JwtService {
                 .getBody();
     }
 }
+

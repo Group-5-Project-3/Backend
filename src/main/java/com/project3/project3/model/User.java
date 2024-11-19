@@ -1,5 +1,3 @@
-// User.java
-
 package com.project3.project3.model;
 
 import org.springframework.data.annotation.Id;
@@ -8,7 +6,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,22 +26,15 @@ public class User implements UserDetails {
 
     private String firstName;
     private String lastName;
+
     private String profilePictureUrl;
 
-    @JsonDeserialize(contentAs = String.class) // ensures correct deserialization for List<String>
     private List<String> roles = new ArrayList<>();
 
     // Default constructor
     public User() {}
 
-    // Constructor with basic fields for test convenience
-    public User(String username, String password, String email) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-    }
-
-    // Constructor with all fields
+    // Constructor with role strings
     public User(String username, String password, String email, String firstName, String lastName, String profilePictureUrl, List<String> roles) {
         this.username = username;
         this.password = password;
@@ -120,6 +110,7 @@ public class User implements UserDetails {
         this.roles = roles;
     }
 
+    // Convert roles to GrantedAuthority objects for Spring Security
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
