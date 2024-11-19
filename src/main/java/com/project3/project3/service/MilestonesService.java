@@ -2,6 +2,8 @@ package com.project3.project3.service;
 
 import com.project3.project3.model.Milestones;
 import com.project3.project3.repository.MilestonesRepository;
+import com.project3.project3.repository.UserBadgeRepository;
+import com.project3.project3.utility.NationalParksList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,10 +11,12 @@ import org.springframework.stereotype.Service;
 public class MilestonesService {
 
     private final MilestonesRepository milestonesRepository;
+    private final UserBadgeRepository userBadgeRepository;
 
     @Autowired
-    public MilestonesService(MilestonesRepository milestonesRepository) {
+    public MilestonesService(MilestonesRepository milestonesRepository, UserBadgeRepository userBadgeRepository) {
         this.milestonesRepository = milestonesRepository;
+        this.userBadgeRepository = userBadgeRepository;
     }
 
     public Milestones createMilestones(String userId) {
@@ -57,11 +61,21 @@ public class MilestonesService {
         return milestonesRepository.save(milestones);
     }
 
-    public Milestones incrementNationalParksVisited(String userId, String nationalPark) {
-        Milestones milestones = getMilestonesByUserId(userId);
-        milestones.setNationalParksVisited(milestones.getNationalParksVisited() + 1);
-        return milestonesRepository.save(milestones);
+    public Milestones incrementNationalParksVisited(String userId, String parkName) {
+        if (NationalParksList.isCaliforniaNationalPark(parkName)) {
+            String badgeId = NationalParksList.getBadgeIdForPark(parkName);
+            boolean hasVisitedPark = userBadgeRepository.findByUserIdAndBadgeId(userId, badgeId).isPresent();
+            if (badgeId != null && !hasVisitedPark) {
+                Milestones milestones = getMilestonesByUserId(userId);
+                milestones.setNationalParksVisited(milestones.getNationalParksVisited() + 1);
+                milestonesRepository.save(milestones);
+                return milestones;
+            }
+        }
+        return getMilestonesByUserId(userId);
     }
+
+
 
     // Additional methods to increment distance and elevation gain based on new hikes
     public Milestones incrementDistance(String userId, double distance) {
