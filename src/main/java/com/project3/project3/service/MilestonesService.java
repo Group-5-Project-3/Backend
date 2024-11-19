@@ -24,7 +24,6 @@ public class MilestonesService {
         return milestonesRepository.save(milestones);
     }
 
-    // Fetches milestones by userId, creating a new record if it doesn't exist
     public Milestones getMilestonesByUserId(String userId) {
         Milestones milestones = milestonesRepository.findByUserId(userId);
         if (milestones == null) {
@@ -75,9 +74,6 @@ public class MilestonesService {
         return getMilestonesByUserId(userId);
     }
 
-
-
-    // Additional methods to increment distance and elevation gain based on new hikes
     public Milestones incrementDistance(String userId, double distance) {
         Milestones milestones = getMilestonesByUserId(userId);
         milestones.setTotalDistance(milestones.getTotalDistance() + distance);
