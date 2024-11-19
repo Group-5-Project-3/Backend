@@ -2,7 +2,10 @@ package com.project3.project3.service;
 
 import com.project3.project3.model.Hike;
 import com.project3.project3.repository.HikeRepository;
+import com.project3.project3.utility.HikeEvent;
+import com.project3.project3.utility.Polyline;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -13,44 +16,50 @@ import java.util.Optional;
 public class HikeService {
 
     private final HikeRepository hikeRepository;
+    private final MilestonesService milestonesService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Autowired
-    public HikeService(HikeRepository hikeRepository) {
+    public HikeService(HikeRepository hikeRepository, MilestonesService milestonesService, ApplicationEventPublisher applicationEventPublisher) {
         this.hikeRepository = hikeRepository;
+        this.milestonesService = milestonesService;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
-    // Create a new hike and set start time
     public Hike startHike(Hike hike) {
         hike.setStartTime(LocalDateTime.now());
+        String userId = hike.getUserId();
+        milestonesService.incrementTotalHikes(userId);
         return hikeRepository.save(hike);
     }
 
-    public Optional<Hike> completeHike(String hikeId, double distance, double elevationGain, String polyline) {
+    public Optional<Hike> completeHike(String hikeId, Double distance, Double elevationGain, List<List<Double>> coordinates) {
+        String polyline = Polyline.encode(coordinates);
         return hikeRepository.findById(hikeId).map(existingHike -> {
             existingHike.setEndTime(LocalDateTime.now());
             existingHike.setDistance(distance);
             existingHike.setElevationGain(elevationGain);
             existingHike.setPolyline(polyline);
+            String userId = existingHike.getUserId();
+            milestonesService.incrementDistance(userId, distance);
+            milestonesService.incrementElevationGain(userId, elevationGain);
+            applicationEventPublisher.publishEvent(new HikeEvent(this, userId));
             return hikeRepository.save(existingHike);
         });
     }
 
-    // Get all hikes for a specific user
     public List<Hike> getHikesByUserId(String userId) {
         return hikeRepository.findByUserId(userId);
     }
 
-    // Get all hikes for a specific trail
     public List<Hike> getHikesByTrailId(String trailId) {
         return hikeRepository.findByTrailId(trailId);
     }
 
-    // Find a specific hike by ID
     public Optional<Hike> getHikeById(String hikeId) {
         return hikeRepository.findById(hikeId);
     }
 
-    // Update an existing hike
     public Optional<Hike> updateHike(String hikeId, Hike updatedHike) {
         return hikeRepository.findById(hikeId).map(existingHike -> {
             if (updatedHike.getStartTime() != null) {
@@ -72,7 +81,6 @@ public class HikeService {
         });
     }
 
-    // Delete a hike by ID
     public boolean deleteHikeById(String hikeId) {
         if (hikeRepository.existsById(hikeId)) {
             hikeRepository.deleteById(hikeId);

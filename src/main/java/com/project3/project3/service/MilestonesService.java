@@ -2,19 +2,21 @@ package com.project3.project3.service;
 
 import com.project3.project3.model.Milestones;
 import com.project3.project3.repository.MilestonesRepository;
+import com.project3.project3.repository.UserBadgeRepository;
+import com.project3.project3.utility.NationalParksList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class MilestonesService {
 
     private final MilestonesRepository milestonesRepository;
+    private final UserBadgeRepository userBadgeRepository;
 
     @Autowired
-    public MilestonesService(MilestonesRepository milestonesRepository) {
+    public MilestonesService(MilestonesRepository milestonesRepository, UserBadgeRepository userBadgeRepository) {
         this.milestonesRepository = milestonesRepository;
+        this.userBadgeRepository = userBadgeRepository;
     }
 
     public Milestones createMilestones(String userId) {
@@ -22,59 +24,72 @@ public class MilestonesService {
         return milestonesRepository.save(milestones);
     }
 
-    public Optional<Milestones> getMilestonesByUserId(String userId) {
-        return milestonesRepository.findByUserId(userId);
+    public Milestones getMilestonesByUserId(String userId) {
+        Milestones milestones = milestonesRepository.findByUserId(userId);
+        if (milestones == null) {
+            milestones = createMilestones(userId);
+        }
+        return milestones;
     }
 
     public Milestones updateMilestones(String userId, Milestones updatedMilestones) {
-        Optional<Milestones> existingMilestones = milestonesRepository.findByUserId(userId);
-        if (existingMilestones.isPresent()) {
-            Milestones milestones = existingMilestones.get();
+        Milestones milestones = getMilestonesByUserId(userId);
 
-            if (updatedMilestones.getTotalHikes() != null) {
-                milestones.setTotalHikes(updatedMilestones.getTotalHikes());
-            }
-            if (updatedMilestones.getTotalDistance() != null) {
-                milestones.setTotalDistance(updatedMilestones.getTotalDistance());
-            }
-            if (updatedMilestones.getUniqueTrails() != null) {
-                milestones.setUniqueTrails(updatedMilestones.getUniqueTrails());
-            }
-            if (updatedMilestones.getTotalElevationGain() != null) {
-                milestones.setTotalElevationGain(updatedMilestones.getTotalElevationGain());
-            }
-            if (updatedMilestones.getNationalParksVisited() != null) {
-                milestones.setNationalParksVisited(updatedMilestones.getNationalParksVisited());
-            }
-
-            return milestonesRepository.save(milestones);
-        } else {
-            return milestonesRepository.save(updatedMilestones);
+        if (updatedMilestones.getTotalHikes() != null) {
+            milestones.setTotalHikes(updatedMilestones.getTotalHikes());
         }
+        if (updatedMilestones.getTotalDistance() != null) {
+            milestones.setTotalDistance(updatedMilestones.getTotalDistance());
+        }
+        if (updatedMilestones.getUniqueTrails() != null) {
+            milestones.setUniqueTrails(updatedMilestones.getUniqueTrails());
+        }
+        if (updatedMilestones.getTotalElevationGain() != null) {
+            milestones.setTotalElevationGain(updatedMilestones.getTotalElevationGain());
+        }
+        if (updatedMilestones.getNationalParksVisited() != null) {
+            milestones.setNationalParksVisited(updatedMilestones.getNationalParksVisited());
+        }
+
+        return milestonesRepository.save(milestones);
     }
 
     public Milestones incrementTotalHikes(String userId) {
-        Optional<Milestones> milestones = milestonesRepository.findByUserId(userId);
-        if (milestones.isPresent()) {
-            Milestones m = milestones.get();
-            m.setTotalHikes(m.getTotalHikes() + 1);
-            return milestonesRepository.save(m);
-        }
-        return null;
+        Milestones milestones = getMilestonesByUserId(userId);
+        milestones.setTotalHikes(milestones.getTotalHikes() + 1);
+        return milestonesRepository.save(milestones);
     }
 
-    public Milestones incrementNationalParksVisited(String userId) {
-        Optional<Milestones> milestones = milestonesRepository.findByUserId(userId);
-        if (milestones.isPresent()) {
-            Milestones m = milestones.get();
-            m.setNationalParksVisited(m.getNationalParksVisited() + 1);
-            return milestonesRepository.save(m);
+    public Milestones incrementNationalParksVisited(String userId, String parkName) {
+        if (NationalParksList.isCaliforniaNationalPark(parkName)) {
+            String badgeId = NationalParksList.getBadgeIdForPark(parkName);
+            boolean hasVisitedPark = userBadgeRepository.findByUserIdAndBadgeId(userId, badgeId).isPresent();
+            if (badgeId != null && !hasVisitedPark) {
+                Milestones milestones = getMilestonesByUserId(userId);
+                milestones.setNationalParksVisited(milestones.getNationalParksVisited() + 1);
+                milestonesRepository.save(milestones);
+                return milestones;
+            }
         }
-        return null;
+        return getMilestonesByUserId(userId);
+    }
+
+    public Milestones incrementDistance(String userId, double distance) {
+        Milestones milestones = getMilestonesByUserId(userId);
+        milestones.setTotalDistance(milestones.getTotalDistance() + distance);
+        return milestonesRepository.save(milestones);
+    }
+
+    public Milestones incrementElevationGain(String userId, double elevationGain) {
+        Milestones milestones = getMilestonesByUserId(userId);
+        milestones.setTotalElevationGain(milestones.getTotalElevationGain() + elevationGain);
+        return milestonesRepository.save(milestones);
     }
 
     public void deleteMilestonesByUserId(String userId) {
-        milestonesRepository.findByUserId(userId).ifPresent(milestonesRepository::delete);
+        Milestones milestones = milestonesRepository.findByUserId(userId);
+        if (milestones != null) {
+            milestonesRepository.delete(milestones);
+        }
     }
 }
-

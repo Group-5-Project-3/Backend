@@ -27,8 +27,8 @@ public class HikeController {
             @PathVariable String id,
             @RequestParam Double distance,
             @RequestParam Double elevationGain,
-            @RequestParam String polyline) {
-        Optional<Hike> completedHike = hikeService.completeHike(id, distance, elevationGain, polyline);
+            @RequestParam List<List<Double>> coordinates) {
+        Optional<Hike> completedHike = hikeService.completeHike(id, distance, elevationGain, coordinates);
         if (completedHike.isPresent()) {
             return ResponseEntity.ok(completedHike.get());
         } else {

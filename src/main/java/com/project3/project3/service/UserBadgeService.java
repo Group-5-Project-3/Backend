@@ -32,6 +32,10 @@ public class UserBadgeService {
         return userBadgeRepository.save(userBadge);
     }
 
+    public boolean hasBadge(String userId, String badgeId) {
+        return userBadgeRepository.findByUserIdAndBadgeId(userId, badgeId).isPresent();
+    }
+
     public boolean removeBadge(String id) {
         if (userBadgeRepository.existsById(id)) {
             userBadgeRepository.deleteById(id);
@@ -40,4 +44,5 @@ public class UserBadgeService {
         return false;
     }
 }
+
 

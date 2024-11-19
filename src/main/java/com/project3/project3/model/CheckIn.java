@@ -11,6 +11,7 @@ public class CheckIn {
     private String checkInId;
 
     private String trailId;
+    private String name;
     private String userId;
 
     private LocalDateTime timestamp;
@@ -19,9 +20,10 @@ public class CheckIn {
     public CheckIn() {}
 
     // Constructor
-    public CheckIn(String trailId, String userId, LocalDateTime timestamp) {
+    public CheckIn(String trailId, String userId, String name, LocalDateTime timestamp) {
         this.trailId = trailId;
         this.userId = userId;
+        this.name = name;
         this.timestamp = timestamp;
     }
 
@@ -48,6 +50,12 @@ public class CheckIn {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public String getName() {
+        return name;
     }
 
     public LocalDateTime getTimestamp() {

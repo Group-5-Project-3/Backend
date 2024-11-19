@@ -3,8 +3,10 @@ package com.project3.project3.repository;
 import com.project3.project3.model.Trail;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
+import java.util.Optional;
+
 public interface TrailRepository extends MongoRepository<Trail, String> {
-    // Define additional query methods if needed
+    Optional<Trail> findByPlacesId(String placesId);
 }
 
 

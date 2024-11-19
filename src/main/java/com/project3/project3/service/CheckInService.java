@@ -2,7 +2,9 @@ package com.project3.project3.service;
 
 import com.project3.project3.model.CheckIn;
 import com.project3.project3.repository.CheckInRepository;
+import com.project3.project3.utility.CheckInEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,10 +14,14 @@ import java.time.LocalDateTime;
 public class CheckInService {
 
     private final CheckInRepository checkInRepository;
+    private final MilestonesService milestonesService;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Autowired
-    public CheckInService(CheckInRepository checkInRepository) {
+    public CheckInService(CheckInRepository checkInRepository, MilestonesService milestonesService, ApplicationEventPublisher applicationEventPublisher) {
         this.checkInRepository = checkInRepository;
+        this.milestonesService = milestonesService;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     public List<CheckIn> getAllCheckIns() {
@@ -30,11 +36,13 @@ public class CheckInService {
         return checkInRepository.findByUserId(userId);
     }
 
+
     public CheckIn createCheckIn(CheckIn checkIn) {
         checkIn.setTimestamp(LocalDateTime.now());
+        milestonesService.incrementNationalParksVisited(checkIn.getUserId(), checkIn.getName());
+        applicationEventPublisher.publishEvent(new CheckInEvent(this, checkIn.getUserId(), checkIn.getName()));
         return checkInRepository.save(checkIn);
     }
-
     public boolean deleteCheckIn(String id) {
         if (checkInRepository.existsById(id)) {
             checkInRepository.deleteById(id);
