@@ -1,6 +1,7 @@
 package com.project3.project3.controller;
 
 import com.project3.project3.model.FavoriteTrail;
+import com.project3.project3.model.Trail;
 import com.project3.project3.service.FavoriteTrailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,9 @@ public class FavoriteTrailController {
     private FavoriteTrailService favoriteTrailService;
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<FavoriteTrail>> getUserFavorites(@PathVariable String userId) {
-        return ResponseEntity.ok(favoriteTrailService.getFavoritesByUserId(userId));
+    public ResponseEntity<List<Trail>> getUserFavoriteTrails(@PathVariable String userId) {
+        List<Trail> trails = favoriteTrailService.getFavoritesByUserId(userId);
+        return ResponseEntity.ok(trails);
     }
 
     @PostMapping
