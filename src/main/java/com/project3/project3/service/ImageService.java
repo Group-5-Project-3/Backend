@@ -25,12 +25,10 @@ public class ImageService {
 
     public String uploadImage(MultipartFile file, String bucketName, String folderName) throws IOException {
         String objectKey = folderName + "/" + file.getOriginalFilename();
-
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
                 .key(objectKey)
                 .build();
-
         s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
         return objectKey;
     }

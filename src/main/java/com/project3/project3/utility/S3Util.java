@@ -23,7 +23,7 @@ public class S3Util {
                     .key(objectKey)
                     .build();
             GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
-                    .signatureDuration(Duration.ofHours(1)) // URL valid for 1 hour
+                    .signatureDuration(Duration.ofHours(1))
                     .getObjectRequest(getObjectRequest)
                     .build();
             URL presignedUrl = s3Presigner.presignGetObject(presignRequest).url();

@@ -28,49 +28,44 @@ public class JwtService {
     // Generate JWT token with roles and user ID as the subject
     public String generateToken(String userId, Collection<? extends GrantedAuthority> authorities) {
         List<String> roles = authorities.stream()
-                .map(GrantedAuthority::getAuthority)  // Convert authorities to role strings
+                .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
         return Jwts.builder()
-                .setSubject(userId)  // Use userId as the subject
-                .claim("roles", roles)  // Store roles as List<String>
+                .setSubject(userId)
+                .claim("roles", roles)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))  // 24-hour expiration
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24))
                 .signWith(SECRET_KEY)
                 .compact();
     }
 
-    // Extract user ID from token (now the subject)
     public String extractUserId(String token) {
-        return extractClaim(token, Claims::getSubject);  // Extract userId as the subject
+        return extractClaim(token, Claims::getSubject);
     }
 
     // Extract roles from token as a list of GrantedAuthority
     public List<GrantedAuthority> extractRoles(String token) {
-        List<String> roles = extractClaim(token, claims -> claims.get("roles", List.class));  // Extract roles as List<String>
+        List<String> roles = extractClaim(token, claims -> claims.get("roles", List.class));
         return roles.stream()
-                .map(role -> (GrantedAuthority) () -> role)  // Convert each role string to GrantedAuthority
+                .map(role -> (GrantedAuthority) () -> role)
                 .collect(Collectors.toList());
     }
 
-    // Validate token
     public boolean validateToken(String token, String userId) {
         final String extractedUserId = extractUserId(token);
         return (extractedUserId.equals(userId) && !isTokenExpired(token));
     }
 
-    // Check if the token is expired
     private boolean isTokenExpired(String token) {
         return extractClaim(token, Claims::getExpiration).before(new Date());
     }
 
-    // Extract specific claim from token
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    // Extract all claims from token
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(SECRET_KEY)

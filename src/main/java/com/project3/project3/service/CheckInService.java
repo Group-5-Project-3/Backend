@@ -38,7 +38,20 @@ public class CheckInService {
 
 
     public CheckIn createCheckIn(CheckIn checkIn) {
-        checkIn.setTimestamp(LocalDateTime.now());
+        List<CheckIn> userCheckIns = checkInRepository.findByUserId(checkIn.getUserId());
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfToday = now.toLocalDate().atStartOfDay();
+        LocalDateTime endOfToday = now.toLocalDate().atTime(23, 59, 59);
+
+        for (CheckIn existingCheckIn : userCheckIns) {
+            if (!existingCheckIn.getTimestamp().isBefore(startOfToday) &&
+                    !existingCheckIn.getTimestamp().isAfter(endOfToday)) {
+                throw new IllegalArgumentException("User has already checked in today.");
+            }
+        }
+
+        checkIn.setTimestamp(now);
         milestonesService.incrementNationalParksVisited(checkIn.getUserId(), checkIn.getName());
         applicationEventPublisher.publishEvent(new CheckInEvent(this, checkIn.getUserId(), checkIn.getName()));
         return checkInRepository.save(checkIn);

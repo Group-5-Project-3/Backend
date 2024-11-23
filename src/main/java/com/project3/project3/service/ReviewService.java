@@ -19,12 +19,10 @@ public class ReviewService {
         this.reviewRepository = reviewRepository;
     }
 
-    // Retrieve all reviews
     public List<Review> getAllReviews() {
         return reviewRepository.findAll();
     }
 
-    // Retrieve reviews by trail ID
     public List<Review> getReviewsByTrailId(String trailId) {
         return reviewRepository.findByTrailId(trailId);
     }
@@ -42,18 +40,15 @@ public class ReviewService {
         return count > 0 ? totalDifficulty / count : 0.0;
     }
 
-    // Retrieve reviews by user ID
     public List<Review> getReviewsByUserId(String userId) {
         return reviewRepository.findByUserId(userId);
     }
 
-    // Create a new review
     public Review createReview(Review review) {
         review.setTimestamp(LocalDateTime.now());
         return reviewRepository.save(review);
     }
 
-    // Delete a review by ID
     public boolean deleteReview(String id) {
         if (reviewRepository.existsById(id)) {
             reviewRepository.deleteById(id);
@@ -63,7 +58,6 @@ public class ReviewService {
         }
     }
 
-    // Update an existing review
     public Optional<Review> updateReview(String id, Review updatedReview) {
         return reviewRepository.findById(id).map(existingReview -> {
             if (updatedReview.getRating() != null) {
