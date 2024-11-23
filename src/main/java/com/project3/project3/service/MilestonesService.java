@@ -36,16 +36,9 @@ public class MilestonesService {
         return milestonesRepository.save(milestones);
     }
 
-    public Milestones getMilestonesByUserId(String userId) {
-        Milestones milestones = milestonesRepository.findByUserId(userId);
-        if (milestones == null) {
-            milestones = createMilestones(userId);
-        }
-        return milestones;
-    }
 
     public Milestones updateMilestones(String userId, Milestones updatedMilestones) {
-        Milestones milestones = getMilestonesByUserId(userId);
+        Milestones milestones = milestonesRepository.findByUserId(userId);
 
         if (updatedMilestones.getTotalHikes() != null) {
             milestones.setTotalHikes(updatedMilestones.getTotalHikes());
@@ -73,31 +66,31 @@ public class MilestonesService {
     }
 
     public Milestones incrementTotalHikes(String userId) {
-        Milestones milestones = getMilestonesByUserId(userId);
+        Milestones milestones = milestonesRepository.findByUserId(userId);
         milestones.setTotalHikes(milestones.getTotalHikes() + 1);
         return milestonesRepository.save(milestones);
     }
 
     public Milestones incrementTotalReviews(String userId) {
-        Milestones milestones = getMilestonesByUserId(userId);
+        Milestones milestones = milestonesRepository.findByUserId(userId);
         milestones.setTotalReviews(milestones.getTotalReviews() + 1);
         return milestonesRepository.save(milestones);
     }
 
     public Milestones decrementTotalReviews(String userId) {
-        Milestones milestones = getMilestonesByUserId(userId);
+        Milestones milestones = milestonesRepository.findByUserId(userId);
         milestones.setTotalReviews(milestones.getTotalReviews() - 1);
         return milestonesRepository.save(milestones);
     }
 
     public Milestones incrementTotalCheckIns(String userId) {
-        Milestones milestones = getMilestonesByUserId(userId);
+        Milestones milestones = milestonesRepository.findByUserId(userId);
         milestones.setTotalCheckIns(milestones.getTotalCheckIns() + 1);
         return milestonesRepository.save(milestones);
     }
 
     public Milestones decrementTotalCheckIns(String userId) {
-        Milestones milestones = getMilestonesByUserId(userId);
+        Milestones milestones = milestonesRepository.findByUserId(userId);
         milestones.setTotalCheckIns(milestones.getTotalReviews() - 1);
         return milestonesRepository.save(milestones);
     }
@@ -107,23 +100,23 @@ public class MilestonesService {
             String badgeId = NationalParksList.getBadgeIdForPark(parkName);
             boolean hasVisitedPark = userBadgeRepository.findByUserIdAndBadgeId(userId, badgeId).isPresent();
             if (badgeId != null && !hasVisitedPark) {
-                Milestones milestones = getMilestonesByUserId(userId);
+                Milestones milestones = milestonesRepository.findByUserId(userId);
                 milestones.setNationalParksVisited(milestones.getNationalParksVisited() + 1);
                 milestonesRepository.save(milestones);
                 return milestones;
             }
         }
-        return getMilestonesByUserId(userId);
+        return milestonesRepository.findByUserId(userId);
     }
 
     public Milestones incrementDistance(String userId, double distance) {
-        Milestones milestones = getMilestonesByUserId(userId);
+        Milestones milestones = milestonesRepository.findByUserId(userId);
         milestones.setTotalDistance(milestones.getTotalDistance() + distance);
         return milestonesRepository.save(milestones);
     }
 
     public Milestones incrementElevationGain(String userId, double elevationGain) {
-        Milestones milestones = getMilestonesByUserId(userId);
+        Milestones milestones = milestonesRepository.findByUserId(userId);
         milestones.setTotalElevationGain(milestones.getTotalElevationGain() + elevationGain);
         return milestonesRepository.save(milestones);
     }
