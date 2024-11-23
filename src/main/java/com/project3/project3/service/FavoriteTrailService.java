@@ -33,6 +33,9 @@ public class FavoriteTrailService {
     }
 
     public FavoriteTrail addFavoriteTrail(FavoriteTrail favoriteTrail) {
+        if (favoriteTrailRepository.findByUserIdAndTrailId(favoriteTrail.getUserId(), favoriteTrail.getTrailId()).isPresent()) {
+            throw new IllegalArgumentException("Trail is already in favorites.");
+        }
         favoriteTrail.setFavoritedTimestamp(LocalDateTime.now());
         return favoriteTrailRepository.save(favoriteTrail);
     }
@@ -45,4 +48,3 @@ public class FavoriteTrailService {
         return false;
     }
 }
-
