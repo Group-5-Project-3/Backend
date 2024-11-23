@@ -25,6 +25,7 @@ public class Milestones {
         this.createdDate = createdDate;
         this.totalHikes = totalHikes;
         this.totalReviews = totalReviews;
+        this.totalCheckIns = totalCheckIns;
         this.totalDistance = totalDistance;
         this.uniqueTrails = uniqueTrails;
         this.totalElevationGain = totalElevationGain;
