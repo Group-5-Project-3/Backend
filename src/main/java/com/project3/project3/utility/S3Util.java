@@ -1,4 +1,5 @@
 package com.project3.project3.utility;
+import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
@@ -6,6 +7,7 @@ import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import java.net.URL;
 import java.time.Duration;
 
+@Component
 public class S3Util {
 
     private final S3Presigner s3Presigner;

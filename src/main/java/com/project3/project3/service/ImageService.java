@@ -23,15 +23,16 @@ public class ImageService {
         this.region = System.getenv("AWS_REGION");
     }
 
-    public String uploadImage(MultipartFile file, String bucketName, String folder) throws IOException {
-        String fileName = folder + "/" + UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+    public String uploadImage(MultipartFile file, String bucketName, String folderName) throws IOException {
+        String objectKey = folderName + "/" + file.getOriginalFilename();
+
         PutObjectRequest putObjectRequest = PutObjectRequest.builder()
                 .bucket(bucketName)
-                .key(fileName)
-                .contentType(file.getContentType())
+                .key(objectKey)
                 .build();
+
         s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
-        return "https://" + bucketName + ".s3." + region + ".amazonaws.com/" + fileName;
+        return objectKey;
     }
 }
 

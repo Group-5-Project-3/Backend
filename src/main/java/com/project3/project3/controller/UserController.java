@@ -84,20 +84,19 @@ public class UserController {
     }
 
     @PostMapping("/{id}/profile-picture")
-    public ResponseEntity<User> uploadProfilePicture(
-            @PathVariable String id,
-            @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<User> uploadProfilePicture(@PathVariable String id, @RequestParam("file") MultipartFile file) {
         try {
-            String profileImageUrl = imageService.uploadImage(file, System.getenv("BUCKET_NAME"), System.getenv("PROFILE_PIC_FOLDER"));
-            Optional<User> updatedUser = userService.updateProfilePicture(id, profileImageUrl);
+            String objectKey = imageService.uploadImage(file, System.getenv("BUCKET_NAME"), System.getenv("PROFILE_PIC_FOLDER"));
+            Optional<User> updatedUser = userService.updateProfilePicture(id, objectKey);
             if (updatedUser.isPresent()) {
                 return ResponseEntity.ok(updatedUser.get());
             } else {
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
-            return ResponseEntity.status(500).build();
+            return ResponseEntity.status(500).body(null);
         }
     }
+
 }
 
