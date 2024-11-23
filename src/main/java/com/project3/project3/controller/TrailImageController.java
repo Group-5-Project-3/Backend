@@ -40,13 +40,15 @@ public class TrailImageController {
             @RequestParam("userId") String userId,
             @RequestParam("description") String description) {
         try {
-            String imageUrl = imageService.uploadImage(file, System.getenv("BUCKET_NAME"), System.getenv("TRAIL_PIC_FOLDER"));
-            TrailImage savedTrailImage = trailImageService.saveTrailImage(imageUrl, trailId, userId, description);
+            String objectKey = imageService.uploadImage(file, System.getenv("BUCKET_NAME"), System.getenv("TRAIL_PIC_FOLDER"));
+            TrailImage savedTrailImage = trailImageService.saveTrailImage(objectKey, trailId, userId, description);
             return ResponseEntity.ok(savedTrailImage);
         } catch (Exception e) {
-            return ResponseEntity.status(500).build();
+            return ResponseEntity.status(500).body(null);
         }
     }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTrailImage(@PathVariable String id) {
