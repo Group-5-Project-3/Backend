@@ -15,9 +15,6 @@ public class PlacesController {
 
     private final String apiKey = System.getenv("GOOGLE_MAPS_API_KEY");
 
-    /**
-     * Endpoint to get nearby places by latitude and longitude.
-     */
     @GetMapping("/places")
     public ResponseEntity<?> getNearbyPlaces(
             @RequestParam double latitude,
@@ -40,9 +37,6 @@ public class PlacesController {
         }
     }
 
-    /**
-     * Endpoint to get nearby places by city and state.
-     */
     @GetMapping("/places/city-state")
     public ResponseEntity<?> getPlacesByCityAndState(
             @RequestParam String city,
