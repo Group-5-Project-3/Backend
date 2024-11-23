@@ -24,12 +24,18 @@ public class FavoriteTrailController {
     }
 
     @PostMapping
-    public ResponseEntity<FavoriteTrail> addFavoriteTrail(
+    public ResponseEntity<?> addFavoriteTrail(
             @RequestParam String userId,
             @RequestParam String trailId) {
-        FavoriteTrail favoriteTrail = new FavoriteTrail(userId, trailId, LocalDateTime.now());
-        return ResponseEntity.ok(favoriteTrailService.addFavoriteTrail(favoriteTrail));
+        try {
+            FavoriteTrail favoriteTrail = new FavoriteTrail(userId, trailId, LocalDateTime.now());
+            FavoriteTrail savedTrail = favoriteTrailService.addFavoriteTrail(favoriteTrail);
+            return ResponseEntity.ok(savedTrail);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(409).body(e.getMessage());
+        }
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeFavoriteTrail(@PathVariable String id) {

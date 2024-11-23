@@ -28,10 +28,15 @@ public class CheckInController {
     }
 
     @PostMapping
-    public ResponseEntity<CheckIn> createCheckIn(@RequestBody CheckIn checkIn) {
-        CheckIn createdCheckIn = checkInService.createCheckIn(checkIn);
-        return ResponseEntity.ok(createdCheckIn);
+    public ResponseEntity<?> createCheckIn(@RequestBody CheckIn checkIn) {
+        try {
+            CheckIn createdCheckIn = checkInService.createCheckIn(checkIn);
+            return ResponseEntity.ok(createdCheckIn);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(409).body(e.getMessage());
+        }
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCheckIn(@PathVariable String id) {
