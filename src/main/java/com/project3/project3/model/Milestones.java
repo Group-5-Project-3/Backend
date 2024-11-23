@@ -1,14 +1,17 @@
 package com.project3.project3.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
 
 @Document(collection = "milestones")
 public class Milestones {
 
     private String userId;
+    private LocalDateTime createdDate;
     private Integer totalHikes;
+    private Integer totalReviews;
+    private Integer totalCheckIns;
     private Double totalDistance;
     private Integer uniqueTrails;
     private Double totalElevationGain;
@@ -17,9 +20,11 @@ public class Milestones {
     // Constructors
     public Milestones() {}
 
-    public Milestones(String userId, Integer totalHikes, Double totalDistance, Integer uniqueTrails, Double totalElevationGain, Integer nationalParksVisited) {
+    public Milestones(String userId, LocalDateTime createdDate, Integer totalHikes, Integer totalReviews, Integer totalCheckIns, Double totalDistance, Integer uniqueTrails, Double totalElevationGain, Integer nationalParksVisited) {
         this.userId = userId;
+        this.createdDate = createdDate;
         this.totalHikes = totalHikes;
+        this.totalReviews = totalReviews;
         this.totalDistance = totalDistance;
         this.uniqueTrails = uniqueTrails;
         this.totalElevationGain = totalElevationGain;
@@ -36,12 +41,35 @@ public class Milestones {
         this.userId = userId;
     }
 
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
     public Integer getTotalHikes() {
         return totalHikes;
     }
 
     public void setTotalHikes(Integer totalHikes) {
         this.totalHikes = totalHikes;
+    }
+
+    public Integer getTotalReviews() {
+        return totalReviews;
+    }
+
+    public void setTotalReviews(Integer totalReviews) {
+        this.totalReviews = totalReviews;
+    }
+    public Integer getTotalCheckIns() {
+        return totalCheckIns;
+    }
+
+    public void setTotalCheckIns(Integer totalCheckIns) {
+        this.totalCheckIns = totalCheckIns;
     }
 
     public Double getTotalDistance() {

@@ -1,5 +1,6 @@
 package com.project3.project3.service;
 
+import com.project3.project3.model.Milestones;
 import com.project3.project3.model.Review;
 import com.project3.project3.repository.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,12 @@ import java.util.Optional;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final MilestonesService milestonesService;
 
     @Autowired
-    public ReviewService(ReviewRepository reviewRepository) {
+    public ReviewService(ReviewRepository reviewRepository, MilestonesService milestonesService) {
         this.reviewRepository = reviewRepository;
+        this.milestonesService = milestonesService;
     }
 
     public List<Review> getAllReviews() {
@@ -46,11 +49,16 @@ public class ReviewService {
 
     public Review createReview(Review review) {
         review.setTimestamp(LocalDateTime.now());
-        return reviewRepository.save(review);
+        Review savedReview = reviewRepository.save(review);
+        milestonesService.incrementTotalReviews(review.getUserId());
+        return savedReview;
     }
 
     public boolean deleteReview(String id) {
-        if (reviewRepository.existsById(id)) {
+        Optional<Review> optionalReview = reviewRepository.findById(id);
+        if (optionalReview.isPresent()) {
+            Review review = optionalReview.get();
+            milestonesService.decrementTotalReviews(review.getUserId());
             reviewRepository.deleteById(id);
             return true;
         } else {

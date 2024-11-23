@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class CheckInService {
@@ -50,20 +51,24 @@ public class CheckInService {
                 throw new IllegalArgumentException("User has already checked in today.");
             }
         }
-
         checkIn.setTimestamp(now);
+        milestonesService.incrementTotalCheckIns(checkIn.getUserId());
         milestonesService.incrementNationalParksVisited(checkIn.getUserId(), checkIn.getName());
         applicationEventPublisher.publishEvent(new CheckInEvent(this, checkIn.getUserId(), checkIn.getName()));
         return checkInRepository.save(checkIn);
     }
     public boolean deleteCheckIn(String id) {
-        if (checkInRepository.existsById(id)) {
+        Optional<CheckIn> optionalCheckIn = checkInRepository.findById(id);
+        if (optionalCheckIn.isPresent()) {
+            CheckIn checkIn = optionalCheckIn.get();
+            milestonesService.decrementTotalCheckIns(checkIn.getUserId());
             checkInRepository.deleteById(id);
             return true;
         } else {
             return false;
         }
     }
+
 }
 
 

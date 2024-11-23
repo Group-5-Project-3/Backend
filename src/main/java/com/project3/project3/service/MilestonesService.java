@@ -7,6 +7,8 @@ import com.project3.project3.utility.NationalParksList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class MilestonesService {
 
@@ -20,7 +22,17 @@ public class MilestonesService {
     }
 
     public Milestones createMilestones(String userId) {
-        Milestones milestones = new Milestones(userId, 0, 0.0, 0, 0.0, 0);
+        Milestones milestones = new Milestones(
+                userId,
+                LocalDateTime.now(),
+                0,
+                0,
+                0,
+                0.0,
+                0,
+                0.0,
+                0
+        );
         return milestonesRepository.save(milestones);
     }
 
@@ -37,6 +49,12 @@ public class MilestonesService {
 
         if (updatedMilestones.getTotalHikes() != null) {
             milestones.setTotalHikes(updatedMilestones.getTotalHikes());
+        }
+        if (updatedMilestones.getTotalReviews() != null) {
+            milestones.setTotalReviews(updatedMilestones.getTotalReviews());
+        }
+        if (updatedMilestones.getTotalCheckIns() != null) {
+            milestones.setTotalCheckIns(updatedMilestones.getTotalCheckIns());
         }
         if (updatedMilestones.getTotalDistance() != null) {
             milestones.setTotalDistance(updatedMilestones.getTotalDistance());
@@ -57,6 +75,30 @@ public class MilestonesService {
     public Milestones incrementTotalHikes(String userId) {
         Milestones milestones = getMilestonesByUserId(userId);
         milestones.setTotalHikes(milestones.getTotalHikes() + 1);
+        return milestonesRepository.save(milestones);
+    }
+
+    public Milestones incrementTotalReviews(String userId) {
+        Milestones milestones = getMilestonesByUserId(userId);
+        milestones.setTotalReviews(milestones.getTotalReviews() + 1);
+        return milestonesRepository.save(milestones);
+    }
+
+    public Milestones decrementTotalReviews(String userId) {
+        Milestones milestones = getMilestonesByUserId(userId);
+        milestones.setTotalReviews(milestones.getTotalReviews() - 1);
+        return milestonesRepository.save(milestones);
+    }
+
+    public Milestones incrementTotalCheckIns(String userId) {
+        Milestones milestones = getMilestonesByUserId(userId);
+        milestones.setTotalCheckIns(milestones.getTotalCheckIns() + 1);
+        return milestonesRepository.save(milestones);
+    }
+
+    public Milestones decrementTotalCheckIns(String userId) {
+        Milestones milestones = getMilestonesByUserId(userId);
+        milestones.setTotalCheckIns(milestones.getTotalReviews() - 1);
         return milestonesRepository.save(milestones);
     }
 
@@ -93,3 +135,4 @@ public class MilestonesService {
         }
     }
 }
+
