@@ -2,6 +2,7 @@ package com.project3.project3.service;
 
 import com.project3.project3.model.User;
 import com.project3.project3.repository.UserRepository;
+import com.project3.project3.utility.S3Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -22,6 +23,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private S3Util s3Util;
 
     // Required method for authentication with Spring Security
     @Override
@@ -69,8 +73,20 @@ public class UserService implements UserDetailsService {
     }
 
     public Optional<User> getUserById(String id) {
-        return userRepository.findById(id);
+        Optional<User> optionalUser = userRepository.findById(id);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            String profilePictureKey = user.getProfilePictureUrl();
+            if (profilePictureKey != null && !profilePictureKey.isEmpty()) {
+                String bucketName = System.getenv("BUCKET_NAME");
+                String presignedUrl = s3Util.generatePresignedUrl(bucketName, profilePictureKey);
+                user.setProfilePictureUrl(presignedUrl);
+            }
+        }
+        return optionalUser;
     }
+
 
     public User saveUser(User user) {
         String hashedPassword = passwordEncoder.encode(user.getPassword());

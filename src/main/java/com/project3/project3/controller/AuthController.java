@@ -70,7 +70,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody User user) {
         try {
-            user.setProfilePictureUrl("https://cst438project3.s3.us-west-1.amazonaws.com/profile-pictures/default_profile_picture.jpeg");
+            user.setProfilePictureUrl("profile-pictures/default_profile_picture.jpeg");
             user.setRoles(Collections.singletonList("ROLE_USER"));
             User savedUser = userService.saveUser(user);
             milestonesService.createMilestones(savedUser.getId());
