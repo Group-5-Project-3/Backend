@@ -77,15 +77,13 @@ public class UserService implements UserDetailsService {
 
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            String profilePictureKey = user.getProfilePictureUrl();
-            if (profilePictureKey != null && !profilePictureKey.isEmpty()) {
-                String bucketName = System.getenv("BUCKET_NAME");
-                String presignedUrl = s3Util.generatePresignedUrl(bucketName, profilePictureKey);
-                user.setProfilePictureUrl(presignedUrl);
-            }
+            String bucketName = System.getenv("BUCKET_NAME");
+            String presignedUrl = s3Util.generatePresignedUrl(bucketName, user.getProfilePictureUrl());
+            user.setProfilePictureUrl(presignedUrl);
         }
         return optionalUser;
     }
+
 
 
     public User saveUser(User user) {
