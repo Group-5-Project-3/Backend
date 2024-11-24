@@ -1,6 +1,7 @@
 package com.project3.project3.controller;
 
 import com.project3.project3.model.Milestones;
+import com.project3.project3.repository.MilestonesRepository;
 import com.project3.project3.service.MilestonesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,16 +12,18 @@ import org.springframework.web.bind.annotation.*;
 public class MilestonesController {
 
     private final MilestonesService milestonesService;
+    private final MilestonesRepository milestonesRepository;
 
     @Autowired
-    public MilestonesController(MilestonesService milestonesService) {
+    public MilestonesController(MilestonesService milestonesService, MilestonesRepository milestonesRepository) {
         this.milestonesService = milestonesService;
+        this.milestonesRepository = milestonesRepository;
     }
 
     // Get milestones by user ID
     @GetMapping("/{userId}")
     public ResponseEntity<Milestones> getMilestonesByUserId(@PathVariable String userId) {
-        Milestones milestones = milestonesService.getMilestonesByUserId(userId);
+        Milestones milestones = milestonesRepository.findByUserId(userId);
         return ResponseEntity.ok(milestones);
     }
 

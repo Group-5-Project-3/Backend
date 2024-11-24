@@ -1,6 +1,7 @@
 package com.project3.project3.utility;
 
 import com.project3.project3.model.Milestones;
+import com.project3.project3.repository.MilestonesRepository;
 import com.project3.project3.service.MilestonesService;
 import com.project3.project3.service.UserBadgeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +13,20 @@ public class BadgeObserver {
 
     private final MilestonesService milestonesService;
     private final UserBadgeService userBadgeService;
+    private final MilestonesRepository milestonesRepository;
 
     @Autowired
-    public BadgeObserver(MilestonesService milestonesService, UserBadgeService userBadgeService) {
+    public BadgeObserver(MilestonesService milestonesService, UserBadgeService userBadgeService, MilestonesRepository milestonesRepository) {
         this.milestonesService = milestonesService;
         this.userBadgeService = userBadgeService;
+        this.milestonesRepository = milestonesRepository;
     }
 
     @EventListener
     public void onHikeEvent(HikeEvent event) {
         String userId = event.getUserId();
 
-        Milestones milestones = milestonesService.getMilestonesByUserId(userId);
+        Milestones milestones = milestonesRepository.findByUserId(userId);
         checkAndAwardDistanceBadge(milestones);
         checkAndAwardElevationBadge(milestones);
         checkAndAwardTotalHikeBadge(milestones);

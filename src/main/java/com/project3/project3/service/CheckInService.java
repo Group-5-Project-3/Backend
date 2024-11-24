@@ -39,19 +39,19 @@ public class CheckInService {
 
 
     public CheckIn createCheckIn(CheckIn checkIn) {
-        List<CheckIn> userCheckIns = checkInRepository.findByUserId(checkIn.getUserId());
-
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime startOfToday = now.toLocalDate().atStartOfDay();
-        LocalDateTime endOfToday = now.toLocalDate().atTime(23, 59, 59);
-
-        for (CheckIn existingCheckIn : userCheckIns) {
-            if (!existingCheckIn.getTimestamp().isBefore(startOfToday) &&
-                    !existingCheckIn.getTimestamp().isAfter(endOfToday)) {
-                throw new IllegalArgumentException("User has already checked in today.");
-            }
-        }
-        checkIn.setTimestamp(now);
+//        List<CheckIn> userCheckIns = checkInRepository.findByUserId(checkIn.getUserId());
+//
+//        LocalDateTime now = LocalDateTime.now();
+//        LocalDateTime startOfToday = now.toLocalDate().atStartOfDay();
+//        LocalDateTime endOfToday = now.toLocalDate().atTime(23, 59, 59);
+//
+//        for (CheckIn existingCheckIn : userCheckIns) {
+//            if (!existingCheckIn.getTimestamp().isBefore(startOfToday) &&
+//                    !existingCheckIn.getTimestamp().isAfter(endOfToday)) {
+//                throw new IllegalArgumentException("User has already checked in today.");
+//            }
+//        }
+//        checkIn.setTimestamp(now);
         milestonesService.incrementTotalCheckIns(checkIn.getUserId());
         milestonesService.incrementNationalParksVisited(checkIn.getUserId(), checkIn.getName());
         applicationEventPublisher.publishEvent(new CheckInEvent(this, checkIn.getUserId(), checkIn.getName()));

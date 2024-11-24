@@ -22,20 +22,9 @@ public class MilestonesService {
     }
 
     public Milestones createMilestones(String userId) {
-        Milestones milestones = new Milestones(
-                userId,
-                LocalDateTime.now(),
-                0,
-                0,
-                0,
-                0.0,
-                0,
-                0.0,
-                0
-        );
+        Milestones milestones = new Milestones(userId, LocalDateTime.now(), 0, 0, 0, 0.0, 0, 0.0, 0);
         return milestonesRepository.save(milestones);
     }
-
 
     public Milestones updateMilestones(String userId, Milestones updatedMilestones) {
         Milestones milestones = milestonesRepository.findByUserId(userId);
