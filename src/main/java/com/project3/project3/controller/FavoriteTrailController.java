@@ -4,6 +4,7 @@ import com.project3.project3.model.FavoriteTrail;
 import com.project3.project3.model.Trail;
 import com.project3.project3.service.FavoriteTrailService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,12 +25,18 @@ public class FavoriteTrailController {
     }
 
     @PostMapping
-    public ResponseEntity<FavoriteTrail> addFavoriteTrail(
+    public ResponseEntity<?> addFavoriteTrail(
             @RequestParam String userId,
             @RequestParam String trailId) {
-        FavoriteTrail favoriteTrail = new FavoriteTrail(userId, trailId, LocalDateTime.now());
-        return ResponseEntity.ok(favoriteTrailService.addFavoriteTrail(favoriteTrail));
+        try {
+            FavoriteTrail favoriteTrail = new FavoriteTrail(userId, trailId);
+            FavoriteTrail addedTrail = favoriteTrailService.addFavoriteTrail(favoriteTrail);
+            return ResponseEntity.ok(addedTrail);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+        }
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeFavoriteTrail(@PathVariable String id) {

@@ -17,10 +17,10 @@ public class BadgeInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         // Uncomment to reload badges into MongoDB if changes are made to badges
-        //badgeUtility.createNationalParksBadges();
-        //badgeUtility.createDistanceBadges();
-        //badgeUtility.createElevationBadges();
-        //badgeUtility.createTotalHikesBadges();
+//        badgeUtility.createNationalParksBadges();
+//        badgeUtility.createDistanceBadges();
+//        badgeUtility.createElevationBadges();
+//        badgeUtility.createTotalHikesBadges();
     }
 }
 

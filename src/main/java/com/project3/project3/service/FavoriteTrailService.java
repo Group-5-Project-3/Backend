@@ -33,9 +33,14 @@ public class FavoriteTrailService {
     }
 
     public FavoriteTrail addFavoriteTrail(FavoriteTrail favoriteTrail) {
+        if (favoriteTrailRepository.existsByUserIdAndTrailId(favoriteTrail.getUserId(), favoriteTrail.getTrailId())) {
+            throw new IllegalArgumentException("This trail is already in the user's favorites.");
+        }
         favoriteTrail.setFavoritedTimestamp(LocalDateTime.now());
         return favoriteTrailRepository.save(favoriteTrail);
     }
+
+
 
     public boolean removeFavoriteTrail(String id) {
         if (favoriteTrailRepository.existsById(id)) {
