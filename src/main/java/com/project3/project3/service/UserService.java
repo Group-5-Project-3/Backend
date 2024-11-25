@@ -12,8 +12,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -27,36 +29,30 @@ public class UserService implements UserDetailsService {
     @Autowired
     private S3Util s3Util;
 
-    // Required method for authentication with Spring Security
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
-
-        Collection<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getUsername(),
-                user.getPassword(),
-                authorities
+        User user = userRepository.findByUsername(username).orElse(null);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with username: " + username);
+        }
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        for (String role : user.getRoles()) {
+            authorities.add(new SimpleGrantedAuthority(role));
+        }
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities
         );
     }
 
-    // Method for loading user details by userId
     public UserDetails loadUserById(String userId) throws UsernameNotFoundException {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + userId));
-
-        Collection<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
-
-        return new org.springframework.security.core.userdetails.User(
-                user.getId(),
-                user.getPassword(),
-                authorities
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with ID: " + userId);
+        }
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        for (String role : user.getRoles()) {
+            authorities.add(new SimpleGrantedAuthority(role));
+        }
+        return new org.springframework.security.core.userdetails.User(user.getId(), user.getPassword(), authorities
         );
     }
 
@@ -68,23 +64,20 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
 
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public Optional<User> getUserById(String id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-
-        if (optionalUser.isPresent()) {
-            User user = optionalUser.get();
+    public User getUserById(String id) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null) {
             String bucketName = System.getenv("BUCKET_NAME");
             String presignedUrl = s3Util.generatePresignedUrl(bucketName, user.getProfilePictureUrl());
             user.setProfilePictureUrl(presignedUrl);
         }
-        return optionalUser;
+        return user;
     }
-
-
 
     public User saveUser(User user) {
         String hashedPassword = passwordEncoder.encode(user.getPassword());
@@ -96,39 +89,44 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public Optional<User> updateUser(String id, User updatedUser) {
-        return userRepository.findById(id).map(user -> {
-            if (updatedUser.getPassword() != null) {
-                String hashedPassword = passwordEncoder.encode(updatedUser.getPassword());
-                user.setPassword(hashedPassword);
-            }
-            if (updatedUser.getUsername() != null) {
-                user.setUsername(updatedUser.getUsername());
-            }
-            if (updatedUser.getEmail() != null) {
-                user.setEmail(updatedUser.getEmail());
-            }
-            if (updatedUser.getFirstName() != null) {
-                user.setFirstName(updatedUser.getFirstName());
-            }
-            if (updatedUser.getLastName() != null) {
-                user.setLastName(updatedUser.getLastName());
-            }
-            if (updatedUser.getProfilePictureUrl() != null) {
-                user.setProfilePictureUrl(updatedUser.getProfilePictureUrl());
-            }
-            if (updatedUser.getRoles() != null) {
-                user.setRoles(updatedUser.getRoles());
-            }
-            return userRepository.save(user);
-        });
+    public User updateUser(String id, User updatedUser) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            return null;
+        }
+
+        if (updatedUser.getPassword() != null) {
+            String hashedPassword = passwordEncoder.encode(updatedUser.getPassword());
+            user.setPassword(hashedPassword);
+        }
+        if (updatedUser.getUsername() != null) {
+            user.setUsername(updatedUser.getUsername());
+        }
+        if (updatedUser.getEmail() != null) {
+            user.setEmail(updatedUser.getEmail());
+        }
+        if (updatedUser.getFirstName() != null) {
+            user.setFirstName(updatedUser.getFirstName());
+        }
+        if (updatedUser.getLastName() != null) {
+            user.setLastName(updatedUser.getLastName());
+        }
+        if (updatedUser.getProfilePictureUrl() != null) {
+            user.setProfilePictureUrl(updatedUser.getProfilePictureUrl());
+        }
+        if (updatedUser.getRoles() != null) {
+            user.setRoles(updatedUser.getRoles());
+        }
+        return userRepository.save(user);
     }
 
-    public Optional<User> updateProfilePicture(String id, String profileImageUrl) {
-        return userRepository.findById(id).map(user -> {
+    public User updateProfilePicture(String id, String profileImageUrl) {
+        User user = userRepository.findById(id).orElse(null);
+        if (user != null) {
             user.setProfilePictureUrl(profileImageUrl);
             return userRepository.save(user);
-        });
+        }
+        return null;
     }
 
     public boolean deleteUserById(String id) {
@@ -139,33 +137,36 @@ public class UserService implements UserDetailsService {
         return false;
     }
 
-    public Optional<User> removeRole(String userId, String role) {
-        return userRepository.findById(userId).map(user -> {
+    public User removeRole(String userId, String role) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null) {
             user.getRoles().remove(role);
             return userRepository.save(user);
-        });
-    }
-
-    public Optional<List<String>> getUserRoles(String userId) {
-        return userRepository.findById(userId).map(User::getRoles);
-    }
-
-    public Optional<User> assignRole(String userId, String role) {
-        return userRepository.findById(userId).map(user -> {
-            if (!user.getRoles().contains(role)) {
-                user.getRoles().add(role);
-            }
-            return userRepository.save(user);
-        });
-    }
-    public User findOrCreateGoogleUser(User googleUser) {
-        Optional<User> existingUser = userRepository.findByEmail(googleUser.getEmail());
-        if (existingUser.isPresent()) {
-            return existingUser.get();
         }
-        googleUser.setRoles(Collections.singletonList("ROLE_USER"));
+        return null;
+    }
+
+    public List<String> getUserRoles(String userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        return user != null ? user.getRoles() : new ArrayList<>();
+    }
+
+    public User assignRole(String userId, String role) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null && !user.getRoles().contains(role)) {
+            user.getRoles().add(role);
+            return userRepository.save(user);
+        }
+        return null;
+    }
+
+    public User findOrCreateGoogleUser(User googleUser) {
+        User existingUser = userRepository.findByEmail(googleUser.getEmail()).orElse(null);
+        if (existingUser != null) {
+            return existingUser;
+        }
+        googleUser.setRoles(List.of("ROLE_USER"));
         googleUser.setPassword("");
         return userRepository.save(googleUser);
     }
-
 }

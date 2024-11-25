@@ -40,8 +40,6 @@ public class FavoriteTrailService {
         return favoriteTrailRepository.save(favoriteTrail);
     }
 
-
-
     public boolean removeFavoriteTrail(String id) {
         if (favoriteTrailRepository.existsById(id)) {
             favoriteTrailRepository.deleteById(id);

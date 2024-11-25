@@ -13,28 +13,14 @@ public class S3Config {
 
     @Bean
     public S3Client s3Client() {
-        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(
-                System.getenv("AWS_ACCESS_KEY_ID"),
-                System.getenv("AWS_SECRET_ACCESS_KEY")
-        );
-
-        return S3Client.builder()
-                .region(Region.of(System.getenv("AWS_REGION")))
-                .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
-                .build();
+        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(System.getenv("AWS_ACCESS_KEY_ID"), System.getenv("AWS_SECRET_ACCESS_KEY"));
+        return S3Client.builder().region(Region.of(System.getenv("AWS_REGION"))).credentialsProvider(StaticCredentialsProvider.create(awsCreds)).build();
     }
 
     @Bean
     public S3Presigner s3Presigner() {
-        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(
-                System.getenv("AWS_ACCESS_KEY_ID"),
-                System.getenv("AWS_SECRET_ACCESS_KEY")
-        );
-
-        return S3Presigner.builder()
-                .region(Region.of(System.getenv("AWS_REGION")))
-                .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
-                .build();
+        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(System.getenv("AWS_ACCESS_KEY_ID"), System.getenv("AWS_SECRET_ACCESS_KEY"));
+        return S3Presigner.builder().region(Region.of(System.getenv("AWS_REGION"))).credentialsProvider(StaticCredentialsProvider.create(awsCreds)).build();
     }
 }
 

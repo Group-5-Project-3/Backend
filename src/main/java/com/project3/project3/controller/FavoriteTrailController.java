@@ -25,9 +25,7 @@ public class FavoriteTrailController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addFavoriteTrail(
-            @RequestParam String userId,
-            @RequestParam String trailId) {
+    public ResponseEntity<?> addFavoriteTrail(@RequestParam String userId, @RequestParam String trailId) {
         try {
             FavoriteTrail favoriteTrail = new FavoriteTrail(userId, trailId);
             FavoriteTrail addedTrail = favoriteTrailService.addFavoriteTrail(favoriteTrail);

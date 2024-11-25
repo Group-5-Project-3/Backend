@@ -1,6 +1,7 @@
 package com.project3.project3.controller;
 
 import com.project3.project3.model.Badge;
+import com.project3.project3.model.BadgeType;
 import com.project3.project3.service.BadgeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,12 @@ public class BadgeController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/type/{badgeType}")
+    public ResponseEntity<List<Badge>> getBadgesByType(@PathVariable BadgeType badgeType) {
+        List<Badge> badges = badgeService.getBadgesByType(badgeType);
+        return ResponseEntity.ok(badges);
     }
 
     @PostMapping

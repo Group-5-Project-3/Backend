@@ -8,7 +8,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -30,9 +29,9 @@ public class AdminController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User updatedUser) {
-        Optional<User> user = userService.updateUser(id, updatedUser);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
+        User user = userService.updateUser(id, updatedUser);
+        if (user != null) {
+            return ResponseEntity.ok(user);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -40,9 +39,9 @@ public class AdminController {
 
     @PutMapping("/{id}/{role}")
     public ResponseEntity<User> assignRoleToUser(@PathVariable String id, @PathVariable String role) {
-        Optional<User> user = userService.assignRole(id, role);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
+        User user = userService.assignRole(id, role);
+        if (user != null) {
+            return ResponseEntity.ok(user);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -50,9 +49,9 @@ public class AdminController {
 
     @DeleteMapping("/{id}/{role}")
     public ResponseEntity<User> removeRoleFromUser(@PathVariable String id, @PathVariable String role) {
-        Optional<User> user = userService.removeRole(id, role);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
+        User user = userService.removeRole(id, role);
+        if (user != null) {
+            return ResponseEntity.ok(user);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -66,9 +65,9 @@ public class AdminController {
 
     @GetMapping("/{id}/roles")
     public ResponseEntity<List<String>> getUserRoles(@PathVariable String id) {
-        Optional<List<String>> roles = userService.getUserRoles(id).map(List::copyOf);
-        if (roles.isPresent()) {
-            return ResponseEntity.ok(roles.get());
+        List<String> roles = userService.getUserRoles(id);
+        if (roles != null) {
+            return ResponseEntity.ok(roles);
         } else {
             return ResponseEntity.notFound().build();
         }

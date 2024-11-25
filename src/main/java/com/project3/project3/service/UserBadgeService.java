@@ -20,7 +20,6 @@ public class UserBadgeService {
     private final BadgeRepository badgeRepository;
     private final S3Util s3Util;
 
-
     @Autowired
     public UserBadgeService(UserBadgeRepository userBadgeRepository, BadgeRepository badgeRepository, S3Util s3Util) {
         this.userBadgeRepository = userBadgeRepository;
@@ -41,8 +40,6 @@ public class UserBadgeService {
         }
         return badges;
     }
-
-
 
     public Optional<UserBadge> getUserBadge(String userId, String badgeId) {
         return userBadgeRepository.findByUserIdAndBadgeId(userId, badgeId);
