@@ -1,6 +1,7 @@
 package com.project3.project3.controller;
 
 import com.project3.project3.model.FavoriteTrail;
+import com.project3.project3.model.FavoriteTrailWithImagesDTO;
 import com.project3.project3.model.Trail;
 import com.project3.project3.service.FavoriteTrailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,6 @@ public class FavoriteTrailController {
         }
     }
 
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> removeFavoriteTrail(@PathVariable String id) {
         boolean deleted = favoriteTrailService.removeFavoriteTrail(id);
@@ -43,6 +43,20 @@ public class FavoriteTrailController {
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/{userId}/with-images")
+    public ResponseEntity<List<FavoriteTrailWithImagesDTO>> getFavoriteTrailsWithImages(@PathVariable String userId) {
+        try {
+            List<FavoriteTrailWithImagesDTO> favoriteTrailsWithImages = favoriteTrailService.getFavoriteTrailsWithImages(userId);
+            if (!favoriteTrailsWithImages.isEmpty()) {
+                return ResponseEntity.ok(favoriteTrailsWithImages);
+            } else {
+                return ResponseEntity.noContent().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(null);
         }
     }
 }

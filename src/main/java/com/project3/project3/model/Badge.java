@@ -62,7 +62,7 @@ public class Badge {
         return badgeUrl;
     }
 
-    public void setBadgeUrl(String imageUrl) {
+    public void setBadgeUrl(String badgeUrl) {
         this.badgeUrl = badgeUrl;
     }
 }

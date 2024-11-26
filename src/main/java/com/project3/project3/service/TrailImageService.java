@@ -63,9 +63,9 @@ public class TrailImageService {
 
     private void setPresignedUrl(TrailImage trailImage) {
         String bucketName = System.getenv("BUCKET_NAME");
-        String objectKey = trailImage.getImageUrl(); // This now contains the object key
+        String objectKey = trailImage.getImageUrl();
         String presignedUrl = s3Util.generatePresignedUrl(bucketName, objectKey);
-        trailImage.setImageUrl(presignedUrl); // Replace object key with presigned URL for the response
+        trailImage.setImageUrl(presignedUrl);
     }
 }
 
