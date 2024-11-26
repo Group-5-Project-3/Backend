@@ -2,6 +2,7 @@ package com.project3.project3.service;
 
 import com.project3.project3.model.TrailImage;
 import com.project3.project3.repository.TrailImageRepository;
+import com.project3.project3.utility.DefaultImageUtil;
 import com.project3.project3.utility.S3Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,9 +26,21 @@ public class TrailImageService {
     public List<TrailImage> getImagesByTrailId(String trailId) {
         List<TrailImage> trailImages = trailImageRepository.findByTrailId(trailId);
         List<TrailImage> updatedImages = new ArrayList<>();
-        for (TrailImage trailImage : trailImages) {
-            setPresignedUrl(trailImage);
-            updatedImages.add(trailImage);
+        String bucketName = System.getenv("BUCKET_NAME");
+        if(trailImages.isEmpty()) {
+            String randomDefaultImageKey = DefaultImageUtil.getRandomDefaultImage();
+            String presignedUrl = s3Util.generatePresignedUrl(bucketName, randomDefaultImageKey);
+            TrailImage defaultImage = new TrailImage();
+            defaultImage.setTrailId(trailId);
+            defaultImage.setImageUrl(presignedUrl);
+            defaultImage.setDescription("Default Image");
+            updatedImages.add(defaultImage);
+        } else {
+            for (TrailImage trailImage : trailImages) {
+                String presignedUrl = s3Util.generatePresignedUrl(bucketName, trailImage.getImageUrl());
+                trailImage.setImageUrl(presignedUrl);
+                updatedImages.add(trailImage);
+            }
         }
         return updatedImages;
     }
