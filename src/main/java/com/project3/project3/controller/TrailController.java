@@ -24,9 +24,9 @@ public class TrailController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Trail> getTrailById(@PathVariable String id) {
-        Optional<Trail> trail = trailService.getTrailById(id);
-        if (trail.isPresent()) {
-            return ResponseEntity.ok(trail.get());
+        Trail trail = trailService.getTrailById(id);
+        if (trail != null) {
+            return ResponseEntity.ok(trail);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -34,9 +34,9 @@ public class TrailController {
     
     @GetMapping("/places/{placesId}")
     public ResponseEntity<Trail> getTrailByPlacesId(@PathVariable String placesId) {
-        Optional<Trail> trail = trailService.getTrailByPlacesId(placesId);
-        if (trail.isPresent()) {
-            return ResponseEntity.ok(trail.get());
+        Trail trail = trailService.getTrailByPlacesId(placesId);
+        if (trail != null) {
+            return ResponseEntity.ok(trail);
         } else {
             return ResponseEntity.notFound().build();
         }

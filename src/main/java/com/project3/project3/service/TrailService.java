@@ -2,6 +2,7 @@ package com.project3.project3.service;
 
 import com.project3.project3.model.Trail;
 import com.project3.project3.repository.TrailRepository;
+import com.project3.project3.utility.ChatGPTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,11 +23,18 @@ public class TrailService {
         return trailRepository.findAll();
     }
 
-    public Optional<Trail> getTrailById(String id) {
-        return trailRepository.findById(id);
+    public Trail getTrailById(String id) {
+        Trail trail = trailRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Trail not found for ID: " + id));
+        if (trail.getDescription() == null || trail.getDescription().isEmpty()) {
+            String prompt = String.format("Provide a detailed and engaging description for a trail or park named '%s'. Highlight its beauty, key features, and why people would enjoy visiting.", trail.getName());
+            String generatedDescription = ChatGPTUtil.getChatGPTResponse(prompt);
+            trail.setDescription(generatedDescription);
+            trailRepository.save(trail);
+        }
+        return trail;
     }
 
-    public Optional<Trail> getTrailByPlacesId(String placesId) {
+    public Trail getTrailByPlacesId(String placesId) {
         return trailRepository.findByPlacesId(placesId);
     }
 

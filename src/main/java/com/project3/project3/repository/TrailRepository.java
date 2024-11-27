@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Optional;
 
 public interface TrailRepository extends MongoRepository<Trail, String> {
-    Optional<Trail> findByPlacesId(String placesId);
+    Trail findByPlacesId(String placesId);
 }
 
 
