@@ -1,10 +1,12 @@
 package com.project3.project3.controller;
 
 import com.project3.project3.model.Badge;
+import com.project3.project3.model.BadgeType;
 import com.project3.project3.service.BadgeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.tinylog.Logger;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +21,10 @@ public class BadgeController {
     @GetMapping
     public ResponseEntity<List<Badge>> getAllBadges() {
         List<Badge> badges = badgeService.getAllBadges();
+        for(int i = 0; i < badges.size(); i++) {
+           String url = badges.get(i).getBadgeUrl();
+           Logger.info("URL: {}", url);
+        }
         return ResponseEntity.ok(badges);
     }
 
@@ -30,6 +36,12 @@ public class BadgeController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @GetMapping("/type/{badgeType}")
+    public ResponseEntity<List<Badge>> getBadgesByType(@PathVariable BadgeType badgeType) {
+        List<Badge> badges = badgeService.getBadgesByType(badgeType);
+        return ResponseEntity.ok(badges);
     }
 
     @PostMapping

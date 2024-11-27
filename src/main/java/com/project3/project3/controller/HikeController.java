@@ -23,11 +23,7 @@ public class HikeController {
     }
 
     @PutMapping("/complete/{id}")
-    public ResponseEntity<Hike> completeHike(
-            @PathVariable String id,
-            @RequestParam Double distance,
-            @RequestParam Double elevationGain,
-            @RequestParam List<List<Double>> coordinates) {
+    public ResponseEntity<Hike> completeHike(@PathVariable String id, @RequestParam Double distance, @RequestParam Double elevationGain, @RequestParam List<List<Double>> coordinates) {
         Optional<Hike> completedHike = hikeService.completeHike(id, distance, elevationGain, coordinates);
         if (completedHike.isPresent()) {
             return ResponseEntity.ok(completedHike.get());

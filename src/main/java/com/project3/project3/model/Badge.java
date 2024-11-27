@@ -58,7 +58,11 @@ public class Badge {
         this.type = type;
     }
 
-    public void setBadgeUrl(String imageUrl) {
+    public String getBadgeUrl() {
+        return badgeUrl;
+    }
+
+    public void setBadgeUrl(String badgeUrl) {
         this.badgeUrl = badgeUrl;
     }
 }

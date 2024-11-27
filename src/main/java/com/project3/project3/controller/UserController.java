@@ -33,9 +33,9 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> findUserById(@PathVariable String id) {
-        Optional<User> user = userService.getUserById(id);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
+        User user = userService.getUserById(id);
+        if (user != null) {
+            return ResponseEntity.ok(user);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -65,9 +65,9 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User updatedUser) {
-        Optional<User> user = userService.updateUser(id, updatedUser);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
+        User user = userService.updateUser(id, updatedUser);
+        if (user != null) {
+            return ResponseEntity.ok(user);
         } else {
             return ResponseEntity.notFound().build();
         }
@@ -84,20 +84,19 @@ public class UserController {
     }
 
     @PostMapping("/{id}/profile-picture")
-    public ResponseEntity<User> uploadProfilePicture(
-            @PathVariable String id,
-            @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<User> uploadProfilePicture(@PathVariable String id, @RequestParam("file") MultipartFile file) {
         try {
-            String profileImageUrl = imageService.uploadImage(file, System.getenv("BUCKET_NAME"), System.getenv("PROFILE_PIC_FOLDER"));
-            Optional<User> updatedUser = userService.updateProfilePicture(id, profileImageUrl);
-            if (updatedUser.isPresent()) {
-                return ResponseEntity.ok(updatedUser.get());
+            String objectKey = imageService.uploadImage(file, System.getenv("BUCKET_NAME"), System.getenv("PROFILE_PIC_FOLDER"));
+            User updatedUser = userService.updateProfilePicture(id, objectKey);
+            if (updatedUser != null) {
+                return ResponseEntity.ok(updatedUser);
             } else {
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
-            return ResponseEntity.status(500).build();
+            return ResponseEntity.status(500).body(null);
         }
     }
+
 }
 

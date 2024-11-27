@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.time.LocalDateTime;
 
@@ -36,13 +37,26 @@ public class CheckInService {
         return checkInRepository.findByUserId(userId);
     }
 
-
     public CheckIn createCheckIn(CheckIn checkIn) {
         checkIn.setTimestamp(LocalDateTime.now());
+
+        List<CheckIn> existingCheckIns = checkInRepository.findByUserIdAndTrailId(checkIn.getUserId(), checkIn.getTrailId());
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime startOfToday = now.toLocalDate().atStartOfDay();
+        LocalDateTime endOfToday = now.toLocalDate().atTime(23, 59, 59);
+
+        for (CheckIn existingCheckIn : existingCheckIns) {
+            if (!existingCheckIn.getTimestamp().isBefore(startOfToday) && !existingCheckIn.getTimestamp().isAfter(endOfToday)) {
+                throw new IllegalArgumentException("User has already checked in to this trail today.");
+            }
+        }
         milestonesService.incrementNationalParksVisited(checkIn.getUserId(), checkIn.getName());
         applicationEventPublisher.publishEvent(new CheckInEvent(this, checkIn.getUserId(), checkIn.getName()));
         return checkInRepository.save(checkIn);
     }
+
+
     public boolean deleteCheckIn(String id) {
         if (checkInRepository.existsById(id)) {
             checkInRepository.deleteById(id);

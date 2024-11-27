@@ -18,10 +18,9 @@ public class FavoriteTrail {
     public FavoriteTrail() {}
 
     // Constructor
-    public FavoriteTrail(String userId, String trailId, LocalDateTime favoritedTimestamp) {
+    public FavoriteTrail(String userId, String trailId) {
         this.userId = userId;
         this.trailId = trailId;
-        this.favoritedTimestamp = favoritedTimestamp;
     }
 
     // Getters and Setters

@@ -9,7 +9,6 @@ import java.util.List;
 @Repository
 public interface HikeRepository extends MongoRepository<Hike, String> {
     List<Hike> findByUserId(String userId);
-
     List<Hike> findByTrailId(String trailId);
 }
 

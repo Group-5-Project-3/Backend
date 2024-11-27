@@ -1,5 +1,6 @@
 package com.project3.project3.controller;
 
+import com.project3.project3.model.Badge;
 import com.project3.project3.model.UserBadge;
 import com.project3.project3.service.UserBadgeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,9 @@ public class UserBadgeController {
     private UserBadgeService userBadgeService;
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<UserBadge>> getUserBadges(@PathVariable String userId) {
-        List<UserBadge> userBadges = userBadgeService.getUserBadgesByUserId(userId);
-        return ResponseEntity.ok(userBadges);
+    public ResponseEntity<List<Badge>> getBadgesByUserId(@PathVariable String userId) {
+        List<Badge> badges = userBadgeService.getBadgesByUserId(userId);
+        return ResponseEntity.ok(badges);
     }
 
     @GetMapping("/user/{userId}/badge/{badgeId}")

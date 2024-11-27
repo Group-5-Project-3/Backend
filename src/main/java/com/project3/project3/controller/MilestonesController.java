@@ -17,14 +17,12 @@ public class MilestonesController {
         this.milestonesService = milestonesService;
     }
 
-    // Get milestones by user ID
     @GetMapping("/{userId}")
     public ResponseEntity<Milestones> getMilestonesByUserId(@PathVariable String userId) {
         Milestones milestones = milestonesService.getMilestonesByUserId(userId);
         return ResponseEntity.ok(milestones);
     }
 
-    // Update milestones for a user
     @PutMapping("/{userId}")
     public ResponseEntity<Milestones> updateMilestones(
             @PathVariable String userId,
@@ -33,7 +31,6 @@ public class MilestonesController {
         return ResponseEntity.ok(milestones);
     }
 
-    // Delete milestones by user ID
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteMilestonesByUserId(@PathVariable String userId) {
         milestonesService.deleteMilestonesByUserId(userId);
