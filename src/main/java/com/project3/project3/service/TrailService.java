@@ -25,7 +25,7 @@ public class TrailService {
 
     public Trail getTrailById(String id) {
         Trail trail = trailRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Trail not found for ID: " + id));
-        if (trail.getDescription() == null || trail.getDescription().isEmpty()) {
+        if (trail.getDescription() == "New review") {
             String prompt = String.format("Provide a detailed and engaging description for a trail or park named '%s'. Highlight its beauty, key features, and why people would enjoy visiting.", trail.getName());
             String generatedDescription = ChatGPTUtil.getChatGPTResponse(prompt);
             trail.setDescription(generatedDescription);
