@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface TrailRepository extends MongoRepository<Trail, String> {
     Trail findByPlacesId(String placesId);
+    Trail findByTrailId(String trailId);
 }
 
 

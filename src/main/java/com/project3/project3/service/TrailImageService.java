@@ -9,6 +9,7 @@ import com.project3.project3.utility.DefaultImageUtil;
 import com.project3.project3.utility.S3Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.tinylog.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,9 +49,8 @@ public class TrailImageService {
             }
         }
 
-        Trail trail = trailRepository.findById(trailId)
-                .orElseThrow(() -> new IllegalArgumentException("Trail not found for ID: " + trailId));
-        if (trail.getDescription() == null || trail.getDescription().isEmpty()) {
+        Trail trail = trailRepository.findById(trailId).orElseThrow(() -> new IllegalArgumentException("Trail not found for ID: " + trailId));
+        if (trail.getDescription().equals("New review")) {
             try {
                 String prompt = String.format("Provide a detailed and engaging description for a trail or park named '%s'. Highlight its beauty, key features, and why people would enjoy visiting.", trail.getName());
                 String generatedDescription = ChatGPTUtil.getChatGPTResponse(prompt);
@@ -60,7 +60,6 @@ public class TrailImageService {
                 throw new RuntimeException("Failed to generate description using ChatGPT: " + e.getMessage(), e);
             }
         }
-
         return updatedImages;
     }
 

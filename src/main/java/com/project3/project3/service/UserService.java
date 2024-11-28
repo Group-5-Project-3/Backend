@@ -29,6 +29,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     private S3Util s3Util;
 
+    @Autowired
+    private MilestonesService milestonesService;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username).orElse(null);
@@ -129,9 +132,11 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
+    // Deletes the user and the milestones of that user
     public boolean deleteUserById(String id) {
         if (userRepository.existsById(id)) {
             userRepository.deleteById(id);
+            milestonesService.deleteMilestonesByUserId(id);
             return true;
         }
         return false;

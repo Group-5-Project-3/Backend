@@ -1,9 +1,13 @@
 package com.project3.project3.service;
 
 import com.project3.project3.model.Review;
+import com.project3.project3.model.Trail;
 import com.project3.project3.repository.ReviewRepository;
+import com.project3.project3.repository.TrailRepository;
+import com.project3.project3.utility.ChatGPTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.time.LocalDateTime;
@@ -13,10 +17,12 @@ import java.util.Optional;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
+    private final TrailRepository trailRepository;
 
     @Autowired
-    public ReviewService(ReviewRepository reviewRepository) {
+    public ReviewService(ReviewRepository reviewRepository, TrailRepository trailRepository) {
         this.reviewRepository = reviewRepository;
+        this.trailRepository = trailRepository;
     }
 
     // Retrieve all reviews
@@ -49,6 +55,15 @@ public class ReviewService {
 
     // Create a new review
     public Review createReview(Review review) {
+        StringBuilder sb = new StringBuilder();
+        List<Review> reviews = reviewRepository.findByTrailId(review.getTrailId());
+        Trail trail = trailRepository.findByTrailId(review.getTrailId());
+        for(int i = 0; i < reviews.size(); i++) {
+            sb.append(i).append(". ").append(reviews.get(i).getComment()).append(" ");
+        }
+        String sentiments = ChatGPTUtil.getChatGPTTrailReviewSentiments(sb.toString());
+        trail.setSentiments(sentiments);
+        trailRepository.save(trail);
         review.setTimestamp(LocalDateTime.now());
         return reviewRepository.save(review);
     }
