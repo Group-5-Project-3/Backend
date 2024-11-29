@@ -24,15 +24,15 @@ public class NationalParksList {
 
     static {
         // Replace Trail Name with PlacesId of these individual national parks
-        PARK_BADGE_IDS.put("Channel Islands National Park", "673bc2f213b4332cc052517c");
-        PARK_BADGE_IDS.put("Death Valley National Park", "673bc2f213b4332cc052517b");
-        PARK_BADGE_IDS.put("Joshua Tree National Park", "673bc2f213b4332cc052517a");
-        PARK_BADGE_IDS.put("Kings Canyon National Park", "673bc2f213b4332cc052517d");
-        PARK_BADGE_IDS.put("Lassen Volcanic National Park", "673bc2f213b4332cc0525179");
-        PARK_BADGE_IDS.put("Pinnacles National Park", "673bc2f213b4332cc0525178");
-        PARK_BADGE_IDS.put("Redwood National and State Parks", "673bc2f213b4332cc0525177");
-        PARK_BADGE_IDS.put("Sequoia National Park", "673bc2f213b4332cc0525176");
-        PARK_BADGE_IDS.put("Yosemite National Park", "673bc2f213b4332cc0525175");
+        PARK_BADGE_IDS.put("Channel Islands National Park", "6742c04d45979b31f37bad64");
+        PARK_BADGE_IDS.put("Death Valley National Park", "6742c04d45979b31f37bad63");
+        PARK_BADGE_IDS.put("Joshua Tree National Park", "6742c04d45979b31f37bad62");
+        PARK_BADGE_IDS.put("Kings Canyon National Park", "6742c04d45979b31f37bad65");
+        PARK_BADGE_IDS.put("Lassen Volcanic National Park", "6742c04d45979b31f37bad61");
+        PARK_BADGE_IDS.put("Pinnacles National Park", "6742c04d45979b31f37bad60");
+        PARK_BADGE_IDS.put("Redwood National and State Parks", "6742c04d45979b31f37bad5f");
+        PARK_BADGE_IDS.put("Sequoia National Park", "6742c04d45979b31f37bad5e");
+        PARK_BADGE_IDS.put("Yosemite National Park", "6742c04d45979b31f37bad5d");
     }
 
     public static boolean isCaliforniaNationalPark(String parkName) {

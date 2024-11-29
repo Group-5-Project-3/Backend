@@ -18,8 +18,8 @@ public class UserBadgeController {
     private UserBadgeService userBadgeService;
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Badge>> getBadgesByUserId(@PathVariable String userId) {
-        List<Badge> badges = userBadgeService.getBadgesByUserId(userId);
+    public ResponseEntity<List<UserBadge>> getBadgesByUserId(@PathVariable String userId) {
+        List<UserBadge> badges = userBadgeService.getBadgesByUserId(userId);
         return ResponseEntity.ok(badges);
     }
 

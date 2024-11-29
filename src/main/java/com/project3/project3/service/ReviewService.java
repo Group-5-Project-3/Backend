@@ -61,6 +61,7 @@ public class ReviewService {
         for(int i = 0; i < reviews.size(); i++) {
             sb.append(i).append(". ").append(reviews.get(i).getComment()).append(" ");
         }
+        sb.append(reviews.size() + 1).append(". ").append(review.getComment()).append(" ");
         String sentiments = ChatGPTUtil.getChatGPTTrailReviewSentiments(sb.toString());
         trail.setSentiments(sentiments);
         trailRepository.save(trail);

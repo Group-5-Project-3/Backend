@@ -26,10 +26,10 @@ public class ChatGPTUtil {
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("model", "gpt-4o-mini");
         requestBody.put("messages", List.of(
-                Map.of("role", "system", "content", "You are a helpful assistant for writing sentiments based on the reviews a trail has.."),
+                Map.of("role", "system", "content", "You are a helpful assistant for writing sentiments based on the reviews a trail has."),
                 Map.of("role", "system", "content", "The reviews will come as a single string with a number a period a and the review"),
                 Map.of("role", "system", "content", "Create 3 keywords that reflect the sentiments the most followed by a colon and a brief statement on why."),
-                Map.of("role", "system", "content", "Ensure the response is short and concise."),
+                Map.of("role", "system", "content", "Ensure the  why response is short and concise."),
                 Map.of("role", "user", "content", allTrailReviews)
         ));
 
