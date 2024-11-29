@@ -1,9 +1,6 @@
 package com.project3.project3.service;
 
-import com.project3.project3.model.FavoriteTrail;
-import com.project3.project3.model.FavoriteTrailWithImagesDTO;
-import com.project3.project3.model.Trail;
-import com.project3.project3.model.TrailImage;
+import com.project3.project3.model.*;
 import com.project3.project3.repository.FavoriteTrailRepository;
 import com.project3.project3.repository.TrailImageRepository;
 import com.project3.project3.repository.TrailRepository;
@@ -82,6 +79,13 @@ public class FavoriteTrailService {
             return true;
         }
         return false;
+    }
+
+    public void deleteByUserId(String userId) {
+        List<FavoriteTrail> userFavoriteTrails = favoriteTrailRepository.findByUserId(userId);
+        if (!userFavoriteTrails.isEmpty()) {
+            favoriteTrailRepository.deleteAll(userFavoriteTrails);
+        }
     }
 }
 

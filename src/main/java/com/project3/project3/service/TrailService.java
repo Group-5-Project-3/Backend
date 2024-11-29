@@ -1,6 +1,8 @@
 package com.project3.project3.service;
 
 import com.project3.project3.model.Trail;
+import com.project3.project3.model.TrailDTO;
+import com.project3.project3.model.TrailImage;
 import com.project3.project3.repository.TrailRepository;
 import com.project3.project3.utility.ChatGPTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +15,12 @@ import java.util.Optional;
 public class TrailService {
 
     private final TrailRepository trailRepository;
+    private final TrailImageService trailImageService;
 
     @Autowired
-    public TrailService(TrailRepository trailRepository) {
+    public TrailService(TrailRepository trailRepository, TrailImageService trailImageService) {
         this.trailRepository = trailRepository;
+        this.trailImageService = trailImageService;
     }
 
     public List<Trail> getAllTrails() {
@@ -34,12 +38,19 @@ public class TrailService {
         return trail;
     }
 
-    public Trail getTrailByPlacesId(String placesId) {
-        return trailRepository.findByPlacesId(placesId);
+    public TrailDTO getTrailByPlacesId(String placesId) {
+        Trail trail = trailRepository.findByPlacesId(placesId);
+        if (trail == null) {
+            throw new IllegalArgumentException("Trail not found for Places ID: " + placesId);
+        }
+        List<TrailImage> images = trailImageService.getImagesByTrailId(trail.getTrailId());
+        return mapToTrailDTO(trail, images);
     }
 
-    public Trail createTrail(Trail trail) {
-        return trailRepository.save(trail);
+    public TrailDTO createTrail(Trail trail) {
+        Trail createdTrail = trailRepository.save(trail);
+        List<TrailImage> images = trailImageService.getImagesByTrailId(createdTrail.getTrailId());
+        return mapToTrailDTO(createdTrail, images);
     }
 
     public Trail updateTrail(String id, Trail trail) {
@@ -54,5 +65,17 @@ public class TrailService {
         } else {
             return false;
         }
+    }
+
+    private TrailDTO mapToTrailDTO(Trail trail, List<TrailImage> images) {
+        TrailDTO trailDTO = new TrailDTO();
+        trailDTO.setTrailId(trail.getTrailId());
+        trailDTO.setPlacesId(trail.getPlacesId());
+        trailDTO.setName(trail.getName());
+        trailDTO.setLocation(trail.getLocation());
+        trailDTO.setDescription(trail.getDescription());
+        trailDTO.setSentiments(trail.getSentiments());
+        trailDTO.setImages(images);
+        return trailDTO;
     }
 }

@@ -1,6 +1,7 @@
 package com.project3.project3.service;
 
 import com.project3.project3.model.Hike;
+import com.project3.project3.model.UserBadge;
 import com.project3.project3.repository.HikeRepository;
 import com.project3.project3.utility.HikeEvent;
 import com.project3.project3.utility.Polyline;
@@ -87,5 +88,12 @@ public class HikeService {
             return true;
         }
         return false;
+    }
+
+    public void deleteByUserId(String userId) {
+        List<Hike> userHikes = hikeRepository.findByUserId(userId);
+        if (!userHikes.isEmpty()) {
+            hikeRepository.deleteAll(userHikes);
+        }
     }
 }

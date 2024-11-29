@@ -46,6 +46,13 @@ public class UserBadgeService {
         }
         return false;
     }
+
+    public void deleteByUserId(String userId) {
+        List<UserBadge> userBadges = userBadgeRepository.findByUserId(userId);
+        if (!userBadges.isEmpty()) {
+            userBadgeRepository.deleteAll(userBadges);
+        }
+    }
 }
 
 

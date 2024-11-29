@@ -86,7 +86,7 @@ public class MilestonesService {
         return milestonesRepository.save(milestones);
     }
 
-    public void deleteMilestonesByUserId(String userId) {
+    public void deleteByUserId(String userId) {
         Milestones milestones = milestonesRepository.findByUserId(userId);
         if (milestones != null) {
             milestonesRepository.delete(milestones);

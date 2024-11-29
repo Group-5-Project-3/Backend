@@ -2,6 +2,7 @@ package com.project3.project3.service;
 
 import com.project3.project3.model.Trail;
 import com.project3.project3.model.TrailImage;
+import com.project3.project3.model.UserBadge;
 import com.project3.project3.repository.TrailImageRepository;
 import com.project3.project3.repository.TrailRepository;
 import com.project3.project3.utility.ChatGPTUtil;
@@ -97,6 +98,13 @@ public class TrailImageService {
         String objectKey = trailImage.getImageUrl();
         String presignedUrl = s3Util.generatePresignedUrl(bucketName, objectKey);
         trailImage.setImageUrl(presignedUrl);
+    }
+
+    public void deleteByUserId(String userId) {
+        List<TrailImage> userImages = trailImageRepository.findByUserId(userId);
+        if (!userImages.isEmpty()) {
+            trailImageRepository.deleteAll(userImages);
+        }
     }
 }
 

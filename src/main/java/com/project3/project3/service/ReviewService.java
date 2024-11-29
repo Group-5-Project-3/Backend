@@ -2,6 +2,7 @@ package com.project3.project3.service;
 
 import com.project3.project3.model.Review;
 import com.project3.project3.model.Trail;
+import com.project3.project3.model.UserBadge;
 import com.project3.project3.repository.ReviewRepository;
 import com.project3.project3.repository.TrailRepository;
 import com.project3.project3.utility.ChatGPTUtil;
@@ -96,6 +97,13 @@ public class ReviewService {
             }
             return reviewRepository.save(existingReview);
         });
+    }
+
+    public void deleteByUserId(String userId) {
+        List<Review> userReviews = reviewRepository.findByUserId(userId);
+        if (!userReviews.isEmpty()) {
+            reviewRepository.deleteAll(userReviews);
+        }
     }
 }
 

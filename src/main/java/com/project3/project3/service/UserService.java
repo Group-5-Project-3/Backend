@@ -32,6 +32,27 @@ public class UserService implements UserDetailsService {
     @Autowired
     private MilestonesService milestonesService;
 
+    @Autowired
+    private FavoriteTrailService favoriteTrailService;
+
+    @Autowired
+    private UserBadgeService userBadgeService;
+
+    @Autowired
+    private CheckInService checkInService;
+
+    @Autowired
+    private ReviewService reviewService;
+
+    @Autowired
+    private HikeService hikeService;
+
+    @Autowired
+    private TrailImageService trailImageService;
+
+
+
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username).orElse(null);
@@ -132,14 +153,19 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
-    // Deletes the user and the milestones of that user
     public boolean deleteUserById(String id) {
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
-            milestonesService.deleteMilestonesByUserId(id);
-            return true;
+        if (!userRepository.existsById(id)) {
+            return false;
         }
-        return false;
+        hikeService.deleteByUserId(id);
+        userBadgeService.deleteByUserId(id);
+        reviewService.deleteByUserId(id);
+        milestonesService.deleteByUserId(id);
+        trailImageService.deleteByUserId(id);
+        checkInService.deleteByUserId(id);
+        favoriteTrailService.deleteByUserId(id);
+        userRepository.deleteById(id);
+        return true;
     }
 
     public User removeRole(String userId, String role) {
