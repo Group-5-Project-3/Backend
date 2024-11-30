@@ -33,7 +33,7 @@ public class MilestonesController {
 
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteMilestonesByUserId(@PathVariable String userId) {
-        milestonesService.deleteMilestonesByUserId(userId);
+        milestonesService.deleteByUserId(userId);
         return ResponseEntity.noContent().build();
     }
 }
