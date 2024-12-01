@@ -10,6 +10,8 @@ public class TrailDTO {
     private String location;
     private String description;
     private String sentiments;
+    private Double avgDifficulty;
+    private Double avgRating;
     private List<TrailImage> images;
 
     // Getters and Setters
@@ -67,6 +69,22 @@ public class TrailDTO {
 
     public void setImages(List<TrailImage> images) {
         this.images = images;
+    }
+
+    public Double getAvgDifficulty() {
+        return avgDifficulty;
+    }
+
+    public void setAvgDifficulty(Double avgDifficulty) {
+        this.avgDifficulty = avgDifficulty;
+    }
+
+    public Double getAvgRating() {
+        return avgRating;
+    }
+
+    public void setAvgRating(Double avgRating) {
+        this.avgRating = avgRating;
     }
 }
 

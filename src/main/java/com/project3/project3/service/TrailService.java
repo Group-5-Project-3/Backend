@@ -76,6 +76,8 @@ public class TrailService {
         trailDTO.setDescription(trail.getDescription());
         trailDTO.setSentiments(trail.getSentiments());
         trailDTO.setImages(images);
+        trailDTO.setAvgRating(trail.getAvgRating());
+        trailDTO.setAvgDifficulty(trail.getAvgDifficulty());
         return trailDTO;
     }
 }

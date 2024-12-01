@@ -10,22 +10,22 @@ public class Trail {
     @Id
     private String trailId;
     private String placesId;
-
     private String name;
     private String location;
     private String description;
     private String sentiments;
+    private Double avgRating;
+    private Double avgDifficulty;
 
     // Default constructor
     public Trail() {}
 
     // Constructor
-    public Trail(String placesId, String name, String location, String description, String Sentiments) {
+    public Trail(String placesId, String name, String location, String description) {
         this.placesId = placesId;
         this.name = name;
         this.location = location;
         this.description = description;
-        this.sentiments = sentiments;
     }
 
     // Getters and Setters
@@ -75,5 +75,21 @@ public class Trail {
 
     public void setSentiments(String sentiments) {
         this.sentiments = sentiments;
+    }
+
+    public Double getAvgRating() {
+        return avgRating;
+    }
+
+    public void setAvgRating(Double avgRating) {
+        this.avgRating = avgRating;
+    }
+
+    public Double getAvgDifficulty() {
+        return avgDifficulty;
+    }
+
+    public void setAvgDifficulty(Double avgDifficulty) {
+        this.avgDifficulty = avgDifficulty;
     }
 }

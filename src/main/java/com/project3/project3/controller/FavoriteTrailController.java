@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.tinylog.Logger;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -36,15 +36,21 @@ public class FavoriteTrailController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> removeFavoriteTrail(@PathVariable String id) {
-        boolean deleted = favoriteTrailService.removeFavoriteTrail(id);
+    @DeleteMapping
+    public ResponseEntity<Void> removeFavoriteTrail(
+            @RequestParam String userId,
+            @RequestParam String trailId) {
+        Logger.info("User ID: {}, Trail ID: {}", userId, trailId);
+        boolean deleted = favoriteTrailService.removeFavoriteTrail(userId, trailId);
         if (deleted) {
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+
 
     @GetMapping("/{userId}/with-images")
     public ResponseEntity<List<FavoriteTrailWithImagesDTO>> getFavoriteTrailsWithImages(@PathVariable String userId) {

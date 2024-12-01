@@ -27,11 +27,6 @@ public class ReviewController {
         List<Review> reviews = reviewService.getReviewsByUserId(userId);
         return ResponseEntity.ok(reviews);
     }
-    @GetMapping("/trail/{trailId}/average-difficulty")
-    public ResponseEntity<Double> getAverageDifficulty(@PathVariable String trailId) {
-        Double averageDifficulty = reviewService.calculateAverageDifficulty(trailId);
-        return ResponseEntity.ok(averageDifficulty);
-    }
 
     @PostMapping
     public ResponseEntity<Review> createReview(@RequestBody Review review) {

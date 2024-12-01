@@ -26,9 +26,6 @@ public class MilestonesService {
 
     public Milestones getMilestonesByUserId(String userId) {
         Milestones milestones = milestonesRepository.findByUserId(userId);
-        if (milestones == null) {
-            milestones = createMilestones(userId);
-        }
         return milestones;
     }
 

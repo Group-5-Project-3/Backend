@@ -2,7 +2,6 @@ package com.project3.project3.service;
 
 import com.project3.project3.model.Review;
 import com.project3.project3.model.Trail;
-import com.project3.project3.model.UserBadge;
 import com.project3.project3.repository.ReviewRepository;
 import com.project3.project3.repository.TrailRepository;
 import com.project3.project3.utility.ChatGPTUtil;
@@ -26,40 +25,51 @@ public class ReviewService {
         this.trailRepository = trailRepository;
     }
 
-    // Retrieve all reviews
-    public List<Review> getAllReviews() {
-        return reviewRepository.findAll();
-    }
-
-    // Retrieve reviews by trail ID
     public List<Review> getReviewsByTrailId(String trailId) {
         return reviewRepository.findByTrailId(trailId);
     }
-    public Double calculateAverageDifficulty(String trailId) {
+
+    public List<Review> getReviewsByUserId(String userId) {
+        return reviewRepository.findByUserId(userId);
+    }
+
+    private void calculateAndSaveAverageDifficulty(String trailId) {
         List<Review> reviews = reviewRepository.findByTrailId(trailId);
         double totalDifficulty = 0.0;
         int count = 0;
-
         for (Review review : reviews) {
             if (review.getDifficultyRating() != null) {
                 totalDifficulty += review.getDifficultyRating();
                 count++;
             }
         }
-        return count > 0 ? totalDifficulty / count : 0.0;
+        double avgDifficulty = count > 0 ? totalDifficulty / count : 0.0;
+        Trail trail = trailRepository.findByTrailId(trailId);
+        trail.setAvgDifficulty(avgDifficulty);
+        trailRepository.save(trail);
     }
 
-    // Retrieve reviews by user ID
-    public List<Review> getReviewsByUserId(String userId) {
-        return reviewRepository.findByUserId(userId);
+    private void calculateAndSaveAverageRating(String trailId) {
+        List<Review> reviews = reviewRepository.findByTrailId(trailId);
+        double totalRating = 0.0;
+        int count = 0;
+        for (Review review : reviews) {
+            if (review.getRating() != null) {
+                totalRating += review.getRating();
+                count++;
+            }
+        }
+        double avgRating = count > 0 ? totalRating / count : 0.0;
+        Trail trail = trailRepository.findByTrailId(trailId);
+        trail.setAvgRating(avgRating);
+        trailRepository.save(trail);
     }
 
-    // Create a new review
     public Review createReview(Review review) {
         StringBuilder sb = new StringBuilder();
         List<Review> reviews = reviewRepository.findByTrailId(review.getTrailId());
         Trail trail = trailRepository.findByTrailId(review.getTrailId());
-        for(int i = 0; i < reviews.size(); i++) {
+        for (int i = 0; i < reviews.size(); i++) {
             sb.append(i).append(". ").append(reviews.get(i).getComment()).append(" ");
         }
         sb.append(reviews.size() + 1).append(". ").append(review.getComment()).append(" ");
@@ -67,10 +77,13 @@ public class ReviewService {
         trail.setSentiments(sentiments);
         trailRepository.save(trail);
         review.setTimestamp(LocalDateTime.now());
-        return reviewRepository.save(review);
+        Review savedReview = reviewRepository.save(review);
+        calculateAndSaveAverageDifficulty(review.getTrailId());
+        calculateAndSaveAverageRating(review.getTrailId());
+
+        return savedReview;
     }
 
-    // Delete a review by ID
     public boolean deleteReview(String id) {
         if (reviewRepository.existsById(id)) {
             reviewRepository.deleteById(id);
@@ -80,7 +93,6 @@ public class ReviewService {
         }
     }
 
-    // Update an existing review
     public Optional<Review> updateReview(String id, Review updatedReview) {
         return reviewRepository.findById(id).map(existingReview -> {
             if (updatedReview.getRating() != null) {

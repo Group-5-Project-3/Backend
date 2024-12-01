@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface FavoriteTrailRepository extends MongoRepository<FavoriteTrail, String> {
     List<FavoriteTrail> findByUserId(String userId);
     boolean existsByUserIdAndTrailId(String userId, String trailId);
-
+    void deleteByUserIdAndTrailId(String userId, String trailId);
 }
 

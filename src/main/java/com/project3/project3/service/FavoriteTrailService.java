@@ -8,6 +8,7 @@ import com.project3.project3.utility.DefaultImageUtil;
 import com.project3.project3.utility.S3Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.tinylog.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,13 +74,17 @@ public class FavoriteTrailService {
         return favoriteTrailRepository.save(favoriteTrail);
     }
 
-    public boolean removeFavoriteTrail(String id) {
-        if (favoriteTrailRepository.existsById(id)) {
-            favoriteTrailRepository.deleteById(id);
+    public boolean removeFavoriteTrail(String userId, String trailId) {
+        if (favoriteTrailRepository.existsByUserIdAndTrailId(userId, trailId)) {
+            favoriteTrailRepository.deleteByUserIdAndTrailId(userId, trailId);
+            Logger.info("Successfully deleted favorite trail with User ID: {} and Trail ID: {}", userId, trailId);
             return true;
         }
+        Logger.warn("No favorite trail found with User ID: {} and Trail ID: {}", userId, trailId);
         return false;
     }
+
+
 
     public void deleteByUserId(String userId) {
         List<FavoriteTrail> userFavoriteTrails = favoriteTrailRepository.findByUserId(userId);
