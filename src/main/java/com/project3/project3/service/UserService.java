@@ -200,4 +200,21 @@ public class UserService implements UserDetailsService {
         googleUser.setPassword("");
         return userRepository.save(googleUser);
     }
+
+    public String getProfilePicture(String userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null && user.getProfilePictureUrl() != null) {
+            String bucketName = System.getenv("BUCKET_NAME");
+            return s3Util.generatePresignedUrl(bucketName, user.getProfilePictureUrl());
+        }
+        return null;
+    }
+
+    public boolean verifyPassword(String userId, String rawPassword) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user != null && user.getPassword() != null) {
+            return passwordEncoder.matches(rawPassword, user.getPassword());
+        }
+        return false;
+    }
 }

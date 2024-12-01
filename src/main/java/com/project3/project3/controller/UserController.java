@@ -98,5 +98,22 @@ public class UserController {
         }
     }
 
+    @PostMapping("/verify-password/{id}")
+    public ResponseEntity<Boolean> verifyPassword(@PathVariable String id, @RequestBody String password) {
+        boolean isPasswordCorrect = userService.verifyPassword(id, password);
+        return ResponseEntity.ok(isPasswordCorrect);
+    }
+
+    @GetMapping("/{id}/profile-picture")
+    public ResponseEntity<String> getProfilePicture(@PathVariable String id) {
+        String profilePictureUrl = userService.getProfilePicture(id);
+        if (profilePictureUrl != null && !profilePictureUrl.isEmpty()) {
+            return ResponseEntity.ok(profilePictureUrl);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
 }
 
