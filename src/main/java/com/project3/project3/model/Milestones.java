@@ -10,6 +10,7 @@ public class Milestones {
     private String userId;
     private Integer totalHikes;
     private Double totalDistance;
+    private Integer totalCheckIn;
     private Integer uniqueTrails;
     private Double totalElevationGain;
     private Integer nationalParksVisited;
@@ -17,13 +18,14 @@ public class Milestones {
     // Constructors
     public Milestones() {}
 
-    public Milestones(String userId, Integer totalHikes, Double totalDistance, Integer uniqueTrails, Double totalElevationGain, Integer nationalParksVisited) {
+    public Milestones(String userId, Integer totalHikes, Double totalDistance, Integer uniqueTrails, Double totalElevationGain, Integer nationalParksVisited, Integer totalCheckIn) {
         this.userId = userId;
         this.totalHikes = totalHikes;
         this.totalDistance = totalDistance;
         this.uniqueTrails = uniqueTrails;
         this.totalElevationGain = totalElevationGain;
         this.nationalParksVisited = nationalParksVisited;
+        this.totalCheckIn = totalCheckIn;
     }
 
     // Getters and Setters
@@ -74,6 +76,14 @@ public class Milestones {
 
     public void setNationalParksVisited(Integer nationalParksVisited) {
         this.nationalParksVisited = nationalParksVisited;
+    }
+
+    public Integer getTotalCheckIn() {
+        return totalCheckIn;
+    }
+
+    public void setTotalCheckIn(Integer totalCheckIn) {
+        this.totalCheckIn = totalCheckIn;
     }
 }
 

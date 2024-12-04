@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.tinylog.Logger;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -210,11 +211,13 @@ public class UserService implements UserDetailsService {
         return null;
     }
 
-    public boolean verifyPassword(String userId, String rawPassword) {
+    public Boolean verifyPassword(String userId, String password) {
         User user = userRepository.findById(userId).orElse(null);
-        if (user != null && user.getPassword() != null) {
-            return passwordEncoder.matches(rawPassword, user.getPassword());
-        }
-        return false;
+        Logger.info("password: {}", password);
+        Logger.info("encoded password: {}", passwordEncoder.encode(password));
+        Logger.info("user: {}", user.getPassword());
+        Boolean bool = passwordEncoder.matches(password, user.getPassword());
+        Logger.info((bool));
+        return bool;
     }
 }

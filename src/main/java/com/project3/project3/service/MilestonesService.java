@@ -20,7 +20,7 @@ public class MilestonesService {
     }
 
     public Milestones createMilestones(String userId) {
-        Milestones milestones = new Milestones(userId, 0, 0.0, 0, 0.0, 0);
+        Milestones milestones = new Milestones(userId, 0, 0.0, 0, 0.0, 0, 0);
         return milestonesRepository.save(milestones);
     }
 
@@ -89,4 +89,14 @@ public class MilestonesService {
             milestonesRepository.delete(milestones);
         }
     }
+
+    public Milestones incrementTotalCheckIn(String userId) {
+        Milestones milestones = getMilestonesByUserId(userId);
+        if (milestones == null) {
+            throw new IllegalArgumentException("Milestones not found for user ID: " + userId);
+        }
+        milestones.setTotalCheckIn(milestones.getTotalCheckIn() + 1);
+        return milestonesRepository.save(milestones);
+    }
+
 }

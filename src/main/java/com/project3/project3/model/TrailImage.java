@@ -13,6 +13,7 @@ public class TrailImage {
     private String imageUrl;
     private String userId;
     private String description;
+    private Integer likes;
 
     // Default constructor
     public TrailImage() {}

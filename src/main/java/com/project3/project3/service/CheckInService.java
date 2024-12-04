@@ -52,6 +52,7 @@ public class CheckInService {
                 throw new IllegalArgumentException("User has already checked in to this trail today.");
             }
         }
+        milestonesService.incrementTotalCheckIn(checkIn.getUserId());
         milestonesService.incrementNationalParksVisited(checkIn.getUserId(), checkIn.getName());
         applicationEventPublisher.publishEvent(new CheckInEvent(this, checkIn.getUserId(), checkIn.getName()));
         return checkInRepository.save(checkIn);
