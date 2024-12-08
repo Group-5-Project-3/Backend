@@ -48,8 +48,6 @@ public class TrailImageController {
         }
     }
 
-
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTrailImage(@PathVariable String id) {
         boolean deleted = trailImageService.deleteTrailImage(id);

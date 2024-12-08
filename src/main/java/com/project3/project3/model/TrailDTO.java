@@ -12,6 +12,7 @@ public class TrailDTO {
     private String sentiments;
     private Double avgDifficulty;
     private Double avgRating;
+    private String coordinates;
     private List<TrailImage> images;
 
     // Getters and Setters
@@ -85,6 +86,14 @@ public class TrailDTO {
 
     public void setAvgRating(Double avgRating) {
         this.avgRating = avgRating;
+    }
+
+    public String getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(String coordinates) {
+        this.coordinates = coordinates;
     }
 }
 

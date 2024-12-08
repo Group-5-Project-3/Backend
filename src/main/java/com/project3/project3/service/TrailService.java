@@ -53,8 +53,9 @@ public class TrailService {
         return mapToTrailDTO(createdTrail, images);
     }
 
-    public Trail updateTrail(String id, Trail trail) {
-        trail.setTrailId(id);
+    public Trail updateTrailCoordinates(String id, String coordinates) {
+        Trail trail = trailRepository.findByTrailId(id);
+        trail.setCoordinates(coordinates);
         return trailRepository.save(trail);
     }
 
@@ -78,6 +79,7 @@ public class TrailService {
         trailDTO.setImages(images);
         trailDTO.setAvgRating(trail.getAvgRating());
         trailDTO.setAvgDifficulty(trail.getAvgDifficulty());
+        trailDTO.setCoordinates(trail.getCoordinates());
         return trailDTO;
     }
 }

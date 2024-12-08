@@ -8,7 +8,7 @@ import java.util.List;
 public class Trail {
 
     @Id
-    private String trailId;
+    private String id;
     private String placesId;
     private String name;
     private String location;
@@ -16,25 +16,27 @@ public class Trail {
     private String sentiments;
     private Double avgRating;
     private Double avgDifficulty;
+    private String coordinates;
 
     // Default constructor
     public Trail() {}
 
     // Constructor
-    public Trail(String placesId, String name, String location, String description) {
+    public Trail(String placesId, String name, String location, String description, String coordinates) {
         this.placesId = placesId;
         this.name = name;
         this.location = location;
         this.description = description;
+        this.coordinates = coordinates;
     }
 
     // Getters and Setters
     public String getTrailId() {
-        return trailId;
+        return id;
     }
 
     public void setTrailId(String trailId) {
-        this.trailId = trailId;
+        this.id = id;
     }
 
     public String getPlacesId() {
@@ -91,5 +93,13 @@ public class Trail {
 
     public void setAvgDifficulty(Double avgDifficulty) {
         this.avgDifficulty = avgDifficulty;
+    }
+
+    public String getCoordinates() {
+        return coordinates;
+    }
+
+    public void setCoordinates(String coordinates) {
+        this.coordinates = coordinates;
     }
 }

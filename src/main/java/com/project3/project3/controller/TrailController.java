@@ -6,6 +6,7 @@ import com.project3.project3.service.TrailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.tinylog.Logger;
 
 import java.util.List;
 import java.util.Optional;
@@ -44,8 +45,9 @@ public class TrailController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Trail> updateTrail(@PathVariable String id, @RequestBody Trail trail) {
-        Trail updatedTrail = trailService.updateTrail(id, trail);
+    public ResponseEntity<Trail> updateTrailCoordinates(@PathVariable String id, @RequestBody String coordinates) {
+        Logger.info("Coordinates: {}", coordinates);
+        Trail updatedTrail = trailService.updateTrailCoordinates(id, coordinates);
         return ResponseEntity.ok(updatedTrail);
     }
 

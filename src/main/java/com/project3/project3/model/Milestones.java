@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "milestones")
 public class Milestones {
 
+    @Id
+    private String milestonesId;
     private String userId;
     private Integer totalHikes;
     private Double totalDistance;
