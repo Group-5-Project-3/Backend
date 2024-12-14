@@ -4,6 +4,7 @@ public enum BadgeType {
     NATIONAL_PARKS,
     DISTANCE,
     ELEVATION,
-    TOTAL_HIKES
+    TOTAL_HIKES,
+    CHECKIN
 }
 

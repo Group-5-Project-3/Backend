@@ -21,6 +21,7 @@ public class BadgeInitializer implements CommandLineRunner {
 //        badgeUtility.createDistanceBadges();
 //        badgeUtility.createElevationBadges();
 //        badgeUtility.createTotalHikesBadges();
+//        badgeUtility.createCheckInBadges();
     }
 }
 

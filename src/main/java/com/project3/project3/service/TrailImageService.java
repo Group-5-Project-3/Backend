@@ -2,19 +2,16 @@ package com.project3.project3.service;
 
 import com.project3.project3.model.Trail;
 import com.project3.project3.model.TrailImage;
-import com.project3.project3.model.UserBadge;
 import com.project3.project3.repository.TrailImageRepository;
 import com.project3.project3.repository.TrailRepository;
 import com.project3.project3.utility.ChatGPTUtil;
-import com.project3.project3.utility.DefaultImageUtil;
+import com.project3.project3.utility.FlickrUtil;
 import com.project3.project3.utility.S3Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.tinylog.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TrailImageService {
@@ -31,38 +28,46 @@ public class TrailImageService {
     }
 
     public List<TrailImage> getImagesByTrailId(String trailId) {
+        // Fetch the trail once and reuse it throughout the method
+        Trail trail = trailRepository.findById(trailId)
+                .orElseThrow(() -> new IllegalArgumentException("Trail not found for ID: " + trailId));
+
         List<TrailImage> trailImages = trailImageRepository.findByTrailId(trailId);
         List<TrailImage> updatedImages = new ArrayList<>();
         String bucketName = System.getenv("BUCKET_NAME");
-        if(trailImages.isEmpty()) {
-            String randomDefaultImageKey = DefaultImageUtil.getRandomDefaultImage();
-            String presignedUrl = s3Util.generatePresignedUrl(bucketName, randomDefaultImageKey);
-            TrailImage defaultImage = new TrailImage();
-            defaultImage.setTrailId(trailId);
-            defaultImage.setImageUrl(presignedUrl);
-            defaultImage.setDescription("Default Image");
-            updatedImages.add(defaultImage);
+
+        if (trailImages.isEmpty()) {
+            // Validate and parse coordinates
+            String coordinates = trail.getCoordinates();
+            if (coordinates == null || !coordinates.contains(",")) {
+                throw new IllegalArgumentException("Invalid coordinates for trail ID: " + trailId);
+            }
+
+            String[] coordinateParts = coordinates.split(",");
+            double latitude = Double.parseDouble(coordinateParts[0]);
+            double longitude = Double.parseDouble(coordinateParts[1]);
+
+            // Fetch Flickr images and add them to the updated list
+            List<String> flickrImages = FlickrUtil.fetchImagesByCoordinates(latitude, longitude);
+            for (String imageUrl : flickrImages) {
+                TrailImage flickrImage = new TrailImage();
+                flickrImage.setTrailId(trailId);
+                flickrImage.setImageUrl(imageUrl);
+                flickrImage.setDescription("Flickr Image");
+                updatedImages.add(flickrImage);
+            }
         } else {
+            // Generate presigned URLs for existing images
             for (TrailImage trailImage : trailImages) {
                 String presignedUrl = s3Util.generatePresignedUrl(bucketName, trailImage.getImageUrl());
                 trailImage.setImageUrl(presignedUrl);
                 updatedImages.add(trailImage);
             }
         }
-
-        Trail trail = trailRepository.findById(trailId).orElseThrow(() -> new IllegalArgumentException("Trail not found for ID: " + trailId));
-        if (trail.getDescription().equals("New review")) {
-            try {
-                String prompt = String.format("Provide a detailed and engaging description for a trail or park named '%s'. Highlight its beauty, key features, and why people would enjoy visiting.", trail.getName());
-                String generatedDescription = ChatGPTUtil.getChatGPTResponse(prompt);
-                trail.setDescription(generatedDescription);
-                trailRepository.save(trail);
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to generate description using ChatGPT: " + e.getMessage(), e);
-            }
-        }
         return updatedImages;
     }
+
+
 
     public List<TrailImage> getImagesByUserId(String userId) {
         List<TrailImage> trailImages = trailImageRepository.findByUserId(userId);

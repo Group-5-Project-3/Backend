@@ -1,7 +1,6 @@
 package com.project3.project3.service;
 
 import com.project3.project3.model.CheckIn;
-import com.project3.project3.model.UserBadge;
 import com.project3.project3.repository.CheckInRepository;
 import com.project3.project3.utility.CheckInEvent;
 import org.springframework.beans.factory.annotation.Autowired;

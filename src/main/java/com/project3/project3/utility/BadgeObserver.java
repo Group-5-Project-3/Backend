@@ -33,6 +33,8 @@ public class BadgeObserver {
     public void onCheckInEvent(CheckInEvent event) {
         String userId = event.getUserId();
         String parkName = event.getParkName();
+        Milestones milestones = milestonesService.getMilestonesByUserId(userId);
+        checkAndAwardCheckInBadge(milestones);
         checkAndAwardNationalParkBadge(userId, parkName);
     }
 
@@ -75,6 +77,18 @@ public class BadgeObserver {
     public void checkAndAwardNationalParkBadge(String userId, String park) {
         if(NationalParksList.isCaliforniaNationalPark(park)) {
             awardBadgeIfNotEarned(userId, NationalParksList.getBadgeIdForPark(park));
+        }
+    }
+
+    public void checkAndAwardCheckInBadge(Milestones milestones) {
+        String userId = milestones.getUserId();
+        int totalCheckIns = milestones.getTotalCheckIn();
+
+        for (Integer checkInCount : CheckInList.CHECKIN_MILESTONES.keySet()) {
+            if (totalCheckIns >= checkInCount) {
+                String badgeId = CheckInList.getBadgeIdForCheckIn(checkInCount);
+                awardBadgeIfNotEarned(userId, badgeId);
+            }
         }
     }
 

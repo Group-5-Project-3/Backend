@@ -5,6 +5,7 @@ import com.project3.project3.repository.FavoriteTrailRepository;
 import com.project3.project3.repository.TrailImageRepository;
 import com.project3.project3.repository.TrailRepository;
 import com.project3.project3.utility.DefaultImageUtil;
+import com.project3.project3.utility.FlickrUtil;
 import com.project3.project3.utility.S3Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,12 +40,19 @@ public class FavoriteTrailService {
             if (trail != null) {
                 String bucketName = System.getenv("BUCKET_NAME");
                 List<TrailImage> trailImages = trailImageRepository.findByTrailId(trail.getTrailId());
-                if(trailImages.isEmpty()) {
-                    String randomDefaultImageKey = DefaultImageUtil.getRandomDefaultImage();
-                    String presignedUrl = s3Util.generatePresignedUrl(bucketName, randomDefaultImageKey);
-                    TrailImage defaultImage = new TrailImage();
-                    defaultImage.setImageUrl(presignedUrl);
-                    trailImages.add(defaultImage);
+                if (trailImages.isEmpty()) {
+                    String[] coordinates = trail.getCoordinates().split(",");
+                    double latitude = Double.parseDouble(coordinates[0]);
+                    double longitude = Double.parseDouble(coordinates[1]);
+                    List<String> flickrImages = FlickrUtil.fetchImagesByCoordinates(latitude, longitude);
+                    trailImages = new ArrayList<>();
+                    for (String imageUrl : flickrImages) {
+                        TrailImage flickrImage = new TrailImage();
+                        flickrImage.setTrailId(trail.getTrailId());
+                        flickrImage.setImageUrl(imageUrl);
+                        flickrImage.setDescription("Flickr Image");
+                        trailImages.add(flickrImage);
+                    }
                 } else {
                     for (TrailImage image : trailImages) {
                         String presignedUrl = s3Util.generatePresignedUrl(bucketName, image.getImageUrl());

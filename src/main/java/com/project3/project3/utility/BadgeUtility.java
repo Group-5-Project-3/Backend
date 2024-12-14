@@ -90,6 +90,25 @@ public class BadgeUtility {
         );
         badgeRepository.saveAll(badges);
     }
+
+    // Method to create and save multiple Check-in badges
+    public void createCheckInBadges() {
+        List<Badge> badges = Arrays.asList(
+                new Badge("First Check-in Badge", "Complete your first check-in", BadgeType.CHECKIN, "badge-pictures/1check.webp"),
+                new Badge("5 Check-ins Badge", "Complete 5 check-ins", BadgeType.CHECKIN, "badge-pictures/5check.webp"),
+                new Badge("10 Check-ins Badge", "Complete 10 check-ins", BadgeType.CHECKIN, "badge-pictures/10check.webp"),
+                new Badge("25 Check-ins Badge", "Complete 25 check-ins", BadgeType.CHECKIN, "badge-pictures/25check.webp"),
+                new Badge("50 Check-ins Badge", "Complete 50 check-ins", BadgeType.CHECKIN, "badge-pictures/50check.webp"),
+                new Badge("75 Check-ins Badge", "Complete 75 check-ins", BadgeType.CHECKIN, "badge-pictures/75check.webp"),
+                new Badge("100 Check-ins Badge", "Complete 100 check-ins", BadgeType.CHECKIN, "badge-pictures/100check.webp"),
+                new Badge("150 Check-ins Badge", "Complete 150 check-ins", BadgeType.CHECKIN, "badge-pictures/150check.webp"),
+                new Badge("200 Check-ins Badge", "Complete 200 check-ins", BadgeType.CHECKIN, "badge-pictures/200check.webp"),
+                new Badge("300 Check-ins Badge", "Complete 300 check-ins", BadgeType.CHECKIN, "badge-pictures/300check.webp"),
+                new Badge("400 Check-ins Badge", "Complete 400 check-ins", BadgeType.CHECKIN, "badge-pictures/400check.webp"),
+                new Badge("500 Check-ins Badge", "Complete 500 check-ins", BadgeType.CHECKIN, "badge-pictures/500check.webp")
+        );
+        badgeRepository.saveAll(badges);
+    }
 }
 
 

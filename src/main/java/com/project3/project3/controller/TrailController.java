@@ -44,12 +44,14 @@ public class TrailController {
         return ResponseEntity.ok(trailService.createTrail(trail));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Trail> updateTrailCoordinates(@PathVariable String id, @RequestBody String coordinates) {
-        Logger.info("Coordinates: {}", coordinates);
+    @PutMapping("/{id}/coordinates/{latitude}/{longitude}")
+    public ResponseEntity<Trail> updateTrailCoordinates(@PathVariable String id, @PathVariable Double latitude, @PathVariable Double longitude) {
+        String coordinates = latitude + "," + longitude;
+        Logger.info("Updating trail ID {} with coordinates: {}", id, coordinates);
         Trail updatedTrail = trailService.updateTrailCoordinates(id, coordinates);
         return ResponseEntity.ok(updatedTrail);
     }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTrail(@PathVariable String id) {

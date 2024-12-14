@@ -8,7 +8,7 @@ import java.util.List;
 public class Trail {
 
     @Id
-    private String id;
+    private String trailId;
     private String placesId;
     private String name;
     private String location;
@@ -32,11 +32,11 @@ public class Trail {
 
     // Getters and Setters
     public String getTrailId() {
-        return id;
+        return trailId;
     }
 
     public void setTrailId(String trailId) {
-        this.id = id;
+        this.trailId = trailId;
     }
 
     public String getPlacesId() {
