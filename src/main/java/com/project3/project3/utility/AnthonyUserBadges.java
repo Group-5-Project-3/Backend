@@ -2,9 +2,9 @@ package com.project3.project3.utility;
 
 import com.project3.project3.model.UserBadge;
 import com.project3.project3.repository.UserBadgeRepository;
-import com.project3.project3.utility.DistanceList;
-import com.project3.project3.utility.NationalParksList;
-import com.project3.project3.utility.TotalHikeList;
+import com.project3.project3.utility.lists.DistanceList;
+import com.project3.project3.utility.lists.NationalParksList;
+import com.project3.project3.utility.lists.TotalHikeList;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

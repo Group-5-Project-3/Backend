@@ -1,9 +1,8 @@
 package com.project3.project3.service;
 
 import com.project3.project3.model.Hike;
-import com.project3.project3.model.UserBadge;
 import com.project3.project3.repository.HikeRepository;
-import com.project3.project3.utility.HikeEvent;
+import com.project3.project3.utility.events.HikeEvent;
 import com.project3.project3.utility.Polyline;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;

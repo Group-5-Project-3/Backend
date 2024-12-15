@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// TODO refactor this to split into two separate files
 @Document(collection = "users")
 public class User implements UserDetails {
 

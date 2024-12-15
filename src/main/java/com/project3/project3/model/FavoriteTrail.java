@@ -1,59 +1,30 @@
 package com.project3.project3.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.LocalDateTime;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Document(collection = "favorite_trails")
 public class FavoriteTrail {
 
     @Id
     private String id;
-
     private String userId;
     private String trailId;
-    private LocalDateTime favoritedTimestamp;
+    private LocalDateTime favoriteTrailTimestamp;
 
-    // Default constructor
-    public FavoriteTrail() {}
-
-    // Constructor
-    public FavoriteTrail(String userId, String trailId) {
-        this.userId = userId;
-        this.trailId = trailId;
-    }
-
-    // Getters and Setters
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getTrailId() {
-        return trailId;
-    }
-
-    public void setTrailId(String trailId) {
-        this.trailId = trailId;
-    }
-
-    public LocalDateTime getFavoritedTimestamp() {
-        return favoritedTimestamp;
-    }
-
-    public void setFavoritedTimestamp(LocalDateTime favoritedTimestamp) {
-        this.favoritedTimestamp = favoritedTimestamp;
+    public static FavoriteTrail favoriteTrailFactory(String userId, String trailId, LocalDateTime favoriteTrailTimestamp) {
+        FavoriteTrail favoriteTrail = new FavoriteTrail();
+        favoriteTrail.setUserId(userId);
+        favoriteTrail.setTrailId(trailId);
+        favoriteTrail.setFavoriteTrailTimestamp(favoriteTrailTimestamp);
+        return favoriteTrail;
     }
 }
 

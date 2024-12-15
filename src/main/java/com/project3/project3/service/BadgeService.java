@@ -30,8 +30,8 @@ public class BadgeService {
         String bucketName = System.getenv("BUCKET_NAME");
 
         for (Badge badge : badges) {
-            String presignedUrl = s3Util.generatePresignedUrl(bucketName, badge.getBadgeUrl());
-            badge.setBadgeUrl(presignedUrl);
+            String presignedUrl = s3Util.generatePresignedUrl(bucketName, badge.getBadgeObjectKey());
+            badge.setBadgeObjectKey(presignedUrl);
             updatedBadges.add(badge);
         }
         return updatedBadges;
@@ -60,8 +60,8 @@ public class BadgeService {
         String bucketName = System.getenv("BUCKET_NAME");
 
         for (Badge badge : badges) {
-            String presignedUrl = s3Util.generatePresignedUrl(bucketName, badge.getBadgeUrl());
-            badge.setBadgeUrl(presignedUrl);
+            String presignedUrl = s3Util.generatePresignedUrl(bucketName, badge.getBadgeObjectKey());
+            badge.setBadgeObjectKey(presignedUrl);
             updatedBadges.add(badge);
         }
 

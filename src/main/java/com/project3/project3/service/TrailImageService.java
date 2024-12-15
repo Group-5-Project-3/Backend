@@ -52,15 +52,15 @@ public class TrailImageService {
             for (String imageUrl : flickrImages) {
                 TrailImage flickrImage = new TrailImage();
                 flickrImage.setTrailId(trailId);
-                flickrImage.setImageUrl(imageUrl);
+                flickrImage.setImageObjectKey(imageUrl);
                 flickrImage.setDescription("Flickr Image");
                 updatedImages.add(flickrImage);
             }
         } else {
             // Generate presigned URLs for existing images
             for (TrailImage trailImage : trailImages) {
-                String presignedUrl = s3Util.generatePresignedUrl(bucketName, trailImage.getImageUrl());
-                trailImage.setImageUrl(presignedUrl);
+                String presignedUrl = s3Util.generatePresignedUrl(bucketName, trailImage.getImageObjectKey());
+                trailImage.setImageObjectKey(presignedUrl);
                 updatedImages.add(trailImage);
             }
         }
@@ -83,7 +83,7 @@ public class TrailImageService {
 
     public TrailImage saveTrailImage(String objectKey, String trailId, String userId, String description) {
         TrailImage trailImage = new TrailImage();
-        trailImage.setImageUrl(objectKey);
+        trailImage.setImageObjectKey(objectKey);
         trailImage.setTrailId(trailId);
         trailImage.setUserId(userId);
         trailImage.setDescription(description);
@@ -100,9 +100,9 @@ public class TrailImageService {
 
     private void setPresignedUrl(TrailImage trailImage) {
         String bucketName = System.getenv("BUCKET_NAME");
-        String objectKey = trailImage.getImageUrl();
+        String objectKey = trailImage.getImageObjectKey();
         String presignedUrl = s3Util.generatePresignedUrl(bucketName, objectKey);
-        trailImage.setImageUrl(presignedUrl);
+        trailImage.setImageObjectKey(presignedUrl);
     }
 
     public void deleteByUserId(String userId) {

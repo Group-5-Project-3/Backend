@@ -1,6 +1,5 @@
 package com.project3.project3;
 
-import com.project3.project3.utility.BadgeInitializer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

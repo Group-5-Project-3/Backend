@@ -3,7 +3,7 @@ package com.project3.project3.service;
 import com.project3.project3.model.Milestones;
 import com.project3.project3.repository.MilestonesRepository;
 import com.project3.project3.repository.UserBadgeRepository;
-import com.project3.project3.utility.NationalParksList;
+import com.project3.project3.utility.lists.NationalParksList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,35 +20,14 @@ public class MilestonesService {
     }
 
     public Milestones createMilestones(String userId) {
-        Milestones milestones = new Milestones(userId, 0, 0.0, 0, 0.0, 0, 0);
+        Milestones milestones = Milestones.milestonesFactory(userId, 0, 0.0, 0, 0, 0.0, 0);
         return milestonesRepository.save(milestones);
     }
+
 
     public Milestones getMilestonesByUserId(String userId) {
         Milestones milestones = milestonesRepository.findByUserId(userId);
         return milestones;
-    }
-
-    public Milestones updateMilestones(String userId, Milestones updatedMilestones) {
-        Milestones milestones = getMilestonesByUserId(userId);
-
-        if (updatedMilestones.getTotalHikes() != null) {
-            milestones.setTotalHikes(updatedMilestones.getTotalHikes());
-        }
-        if (updatedMilestones.getTotalDistance() != null) {
-            milestones.setTotalDistance(updatedMilestones.getTotalDistance());
-        }
-        if (updatedMilestones.getUniqueTrails() != null) {
-            milestones.setUniqueTrails(updatedMilestones.getUniqueTrails());
-        }
-        if (updatedMilestones.getTotalElevationGain() != null) {
-            milestones.setTotalElevationGain(updatedMilestones.getTotalElevationGain());
-        }
-        if (updatedMilestones.getNationalParksVisited() != null) {
-            milestones.setNationalParksVisited(updatedMilestones.getNationalParksVisited());
-        }
-
-        return milestonesRepository.save(milestones);
     }
 
     public Milestones incrementTotalHikes(String userId) {

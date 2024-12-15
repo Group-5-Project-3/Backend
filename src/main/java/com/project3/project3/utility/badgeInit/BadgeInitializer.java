@@ -1,4 +1,4 @@
-package com.project3.project3.utility;
+package com.project3.project3.utility.badgeInit;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

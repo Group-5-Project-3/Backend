@@ -1,4 +1,4 @@
-package com.project3.project3.utility;
+package com.project3.project3.utility.events;
 
 import org.springframework.context.ApplicationEvent;
 

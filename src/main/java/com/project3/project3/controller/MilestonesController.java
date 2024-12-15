@@ -23,14 +23,6 @@ public class MilestonesController {
         return ResponseEntity.ok(milestones);
     }
 
-    @PutMapping("/{userId}")
-    public ResponseEntity<Milestones> updateMilestones(
-            @PathVariable String userId,
-            @RequestBody Milestones updatedMilestones) {
-        Milestones milestones = milestonesService.updateMilestones(userId, updatedMilestones);
-        return ResponseEntity.ok(milestones);
-    }
-
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteMilestonesByUserId(@PathVariable String userId) {
         milestonesService.deleteByUserId(userId);

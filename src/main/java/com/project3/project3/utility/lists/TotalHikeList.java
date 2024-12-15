@@ -1,4 +1,4 @@
-package com.project3.project3.utility;
+package com.project3.project3.utility.lists;
 
 import java.util.HashMap;
 import java.util.Map;

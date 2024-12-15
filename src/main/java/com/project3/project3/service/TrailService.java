@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.tinylog.Logger;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TrailService {
@@ -28,10 +27,8 @@ public class TrailService {
         return trailRepository.findAll();
     }
 
-    // update this to take out the chat gpt stuff here....its not being used here but in the trail images
     public Trail getTrailById(String id) {
-        Trail trail = trailRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Trail not found for ID: " + id));
-        return trail;
+        return trailRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Trail not found for ID: " + id));
     }
 
     public TrailDTO getTrailByPlacesId(String placesId) {
@@ -41,53 +38,42 @@ public class TrailService {
         }
         Logger.info("Trail ID: {}", trail.getTrailId());
         List<TrailImage> images = trailImageService.getImagesByTrailId(trail.getTrailId());
-        return mapToTrailDTO(trail, images);
+        return TrailDTO.trailDTOFactory(trail, images);
     }
 
     public TrailDTO createTrail(Trail trail) {
         String placeId = trail.getPlacesId();
-        if(!checkIfTrailExists(placeId)) {
-            throw new IllegalArgumentException("Trail already exist.");
+        if (!checkIfTrailExists(placeId)) {
+            Trail existingTrail = trailRepository.findByPlacesId(placeId);
+            List<TrailImage> existingTrailImages = trailImageService.getImagesByTrailId(existingTrail.getTrailId());
+            return TrailDTO.trailDTOFactory(existingTrail, existingTrailImages);
         }
-        String prompt = String.format("Provide a detailed and engaging description for a trail or park named '%s'. Ensure the description is accurate to park of trail while highlight the park or trails features.", trail.getName());
+        String prompt = String.format("Provide a detailed and engaging description for a trail or park named '%s'. " + "Ensure the description is accurate to the park or trail while highlighting its features.", trail.getName());
         String generatedDescription = ChatGPTUtil.getChatGPTResponse(prompt);
         trail.setDescription(generatedDescription);
         Trail createdTrail = trailRepository.save(trail);
         List<TrailImage> images = trailImageService.getImagesByTrailId(createdTrail.getTrailId());
-        return mapToTrailDTO(createdTrail, images);
+        return TrailDTO.trailDTOFactory(createdTrail, images);
     }
 
     public Trail updateTrailCoordinates(String id, String coordinates) {
         Trail trail = trailRepository.findByPlacesId(id);
+        if (trail == null) {
+            throw new IllegalArgumentException("Trail not found for Places ID: " + id);
+        }
         trail.setCoordinates(coordinates);
         return trailRepository.save(trail);
     }
 
     public boolean deleteTrail(String id) {
-        if(trailRepository.existsById(id)) {
+        if (trailRepository.existsById(id)) {
             trailRepository.deleteById(id);
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
-    private TrailDTO mapToTrailDTO(Trail trail, List<TrailImage> images) {
-        TrailDTO trailDTO = new TrailDTO();
-        trailDTO.setTrailId(trail.getTrailId());
-        trailDTO.setPlacesId(trail.getPlacesId());
-        trailDTO.setName(trail.getName());
-        trailDTO.setLocation(trail.getLocation());
-        trailDTO.setDescription(trail.getDescription());
-        trailDTO.setSentiments(trail.getSentiments());
-        trailDTO.setImages(images);
-        trailDTO.setAvgRating(trail.getAvgRating());
-        trailDTO.setAvgDifficulty(trail.getAvgDifficulty());
-        trailDTO.setCoordinates(trail.getCoordinates());
-        return trailDTO;
-    }
-
-    private Boolean checkIfTrailExists (String placeId) {
+    private Boolean checkIfTrailExists(String placeId) {
         return trailRepository.findByPlacesId(placeId) != null;
     }
 }

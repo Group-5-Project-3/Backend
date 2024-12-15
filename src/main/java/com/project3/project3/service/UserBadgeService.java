@@ -31,7 +31,7 @@ public class UserBadgeService {
     }
 
     public UserBadge awardBadgeToUser(String userId, String badgeId) {
-        UserBadge userBadge = new UserBadge(userId, badgeId, LocalDateTime.now());
+        UserBadge userBadge = UserBadge.userBadgeFactory(userId, badgeId, LocalDateTime.now());
         return userBadgeRepository.save(userBadge);
     }
 

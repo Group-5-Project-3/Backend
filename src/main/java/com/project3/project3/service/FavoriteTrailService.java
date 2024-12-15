@@ -49,14 +49,14 @@ public class FavoriteTrailService {
                     for (String imageUrl : flickrImages) {
                         TrailImage flickrImage = new TrailImage();
                         flickrImage.setTrailId(trail.getTrailId());
-                        flickrImage.setImageUrl(imageUrl);
+                        flickrImage.setImageObjectKey(imageUrl);
                         flickrImage.setDescription("Flickr Image");
                         trailImages.add(flickrImage);
                     }
                 } else {
                     for (TrailImage image : trailImages) {
-                        String presignedUrl = s3Util.generatePresignedUrl(bucketName, image.getImageUrl());
-                        image.setImageUrl(presignedUrl);
+                        String presignedUrl = s3Util.generatePresignedUrl(bucketName, image.getImageObjectKey());
+                        image.setImageObjectKey(presignedUrl);
                     }
                 }
                 favoriteTrailWithImagesDTOs.add(new FavoriteTrailWithImagesDTO(trail, trailImages));
@@ -74,11 +74,11 @@ public class FavoriteTrailService {
         return trails;
     }
 
-    public FavoriteTrail addFavoriteTrail(FavoriteTrail favoriteTrail) {
-        if (favoriteTrailRepository.existsByUserIdAndTrailId(favoriteTrail.getUserId(), favoriteTrail.getTrailId())) {
+    public FavoriteTrail addFavoriteTrail(String userId, String trailId) {
+        if (favoriteTrailRepository.existsByUserIdAndTrailId(userId, trailId)) {
             throw new IllegalArgumentException("This trail is already in the user's favorites.");
         }
-        favoriteTrail.setFavoritedTimestamp(LocalDateTime.now());
+        FavoriteTrail favoriteTrail = FavoriteTrail.favoriteTrailFactory(userId, trailId, LocalDateTime.now());
         return favoriteTrailRepository.save(favoriteTrail);
     }
 

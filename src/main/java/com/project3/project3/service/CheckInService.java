@@ -2,12 +2,11 @@ package com.project3.project3.service;
 
 import com.project3.project3.model.CheckIn;
 import com.project3.project3.repository.CheckInRepository;
-import com.project3.project3.utility.CheckInEvent;
+import com.project3.project3.utility.events.CheckInEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.time.LocalDateTime;
 

@@ -28,8 +28,7 @@ public class FavoriteTrailController {
     @PostMapping
     public ResponseEntity<?> addFavoriteTrail(@RequestParam String userId, @RequestParam String trailId) {
         try {
-            FavoriteTrail favoriteTrail = new FavoriteTrail(userId, trailId);
-            FavoriteTrail addedTrail = favoriteTrailService.addFavoriteTrail(favoriteTrail);
+            FavoriteTrail addedTrail = favoriteTrailService.addFavoriteTrail(userId, trailId);
             return ResponseEntity.ok(addedTrail);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
@@ -48,9 +47,6 @@ public class FavoriteTrailController {
             return ResponseEntity.notFound().build();
         }
     }
-
-
-
 
     @GetMapping("/{userId}/with-images")
     public ResponseEntity<List<FavoriteTrailWithImagesDTO>> getFavoriteTrailsWithImages(@PathVariable String userId) {
