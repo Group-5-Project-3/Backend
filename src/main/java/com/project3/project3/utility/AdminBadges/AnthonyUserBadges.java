@@ -1,4 +1,4 @@
-package com.project3.project3.utility;
+package com.project3.project3.utility.AdminBadges;
 
 import com.project3.project3.model.UserBadge;
 import com.project3.project3.repository.UserBadgeRepository;
@@ -55,7 +55,7 @@ public class AnthonyUserBadges {
     }
 
     private UserBadge createUserBadge(String userId, String badgeId) {
-        UserBadge userBadge = new UserBadge(userId, badgeId, LocalDateTime.now());
+        UserBadge userBadge = UserBadge.userBadgeFactory(userId, badgeId, LocalDateTime.now());
         return userBadge;
     }
 }

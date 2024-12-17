@@ -1,5 +1,7 @@
-package com.project3.project3.utility;
+package com.project3.project3.utility.badgeInit;
 
+import com.project3.project3.utility.AdminBadges.AnthonyUserBadges;
+import com.project3.project3.utility.AdminBadges.WilliamUserBadges;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

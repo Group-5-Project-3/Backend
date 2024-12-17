@@ -22,7 +22,7 @@ public class BadgeController {
     public ResponseEntity<List<Badge>> getAllBadges() {
         List<Badge> badges = badgeService.getAllBadges();
         for(int i = 0; i < badges.size(); i++) {
-           String url = badges.get(i).getBadgeUrl();
+           String url = badges.get(i).getBadgeObjectKey();
            Logger.info("URL: {}", url);
         }
         return ResponseEntity.ok(badges);

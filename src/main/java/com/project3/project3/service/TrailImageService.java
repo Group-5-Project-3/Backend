@@ -4,7 +4,6 @@ import com.project3.project3.model.Trail;
 import com.project3.project3.model.TrailImage;
 import com.project3.project3.repository.TrailImageRepository;
 import com.project3.project3.repository.TrailRepository;
-import com.project3.project3.utility.ChatGPTUtil;
 import com.project3.project3.utility.FlickrUtil;
 import com.project3.project3.utility.S3Util;
 import org.springframework.beans.factory.annotation.Autowired;

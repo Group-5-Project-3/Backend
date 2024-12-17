@@ -43,12 +43,12 @@ public class TrailService {
 
     public TrailDTO createTrail(Trail trail) {
         String placeId = trail.getPlacesId();
-        if (!checkIfTrailExists(placeId)) {
-            Trail existingTrail = trailRepository.findByPlacesId(placeId);
+        Trail existingTrail = trailRepository.findByPlacesId(placeId);
+        if (existingTrail != null) {
             List<TrailImage> existingTrailImages = trailImageService.getImagesByTrailId(existingTrail.getTrailId());
             return TrailDTO.trailDTOFactory(existingTrail, existingTrailImages);
         }
-        String prompt = String.format("Provide a detailed and engaging description for a trail or park named '%s'. " + "Ensure the description is accurate to the park or trail while highlighting its features.", trail.getName());
+        String prompt = String.format("Provide a detailed and engaging description for a trail or park named '%s'. " + "Ensure the description is accurate to the park or trail while highlighting its features.", trail.getName() != null ? trail.getName() : "Unnamed Trail");
         String generatedDescription = ChatGPTUtil.getChatGPTResponse(prompt);
         trail.setDescription(generatedDescription);
         Trail createdTrail = trailRepository.save(trail);

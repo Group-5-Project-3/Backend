@@ -41,6 +41,7 @@ public class TrailController {
 
     @PostMapping
     public ResponseEntity<TrailDTO> createTrail(@RequestBody Trail trail) {
+        Logger.info("Entering trail controller. Creating trail for place id: {}", trail.getPlacesId());
         return ResponseEntity.ok(trailService.createTrail(trail));
     }
 
